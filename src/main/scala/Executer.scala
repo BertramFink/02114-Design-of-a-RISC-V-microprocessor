@@ -18,6 +18,11 @@ class Executer extends Module{
     val rdOutput    = Output(UInt(5.W))
     val x = Input(Vec(32, SInt(32.W)))
 
+    val rdAddr = Output(UInt (10.W))
+    val wrAddr = Output(UInt (10.W))
+    val wrEna = Output(Bool ())
+    val rdEna = Output(Bool ())
+
   })
   val opcodeReg      = RegInit(0.U(7.W))
   val rdReg          = RegInit(0.U(5.W))
@@ -45,6 +50,10 @@ class Executer extends Module{
   imm_UReg       := io.imm_U
   imm_JReg       := io.imm_J
   funct7Reg      := io.funct7
+  io.wrEna := false.B
+  io.rdEna := false.B
+  io.rdAddr := 0.U
+  io.wrAddr := 0.U
 
 
   io.ALUoutput := 0.S
@@ -83,14 +92,27 @@ class Executer extends Module{
         }
       }
     }
-    //I-type
-    is("b0000011".U){
+
+    // S-type
+    is("b0100011".U){
       switch(funct3Reg){
         is(0x0.U){
-
+          io.ALUoutput := io.x(rs2Reg)
+          io.wrAddr := (io.x(rs1Reg) + imm_SReg)(9,0)
+          io.wrEna := true.B
         }
       }
     }
+    is("b0000011".U){
+      switch(funct3Reg){
+        is(0x0.U){
+          io.rdAddr := (io.x(rs1Reg) + imm_IReg)(9,0)
+          io.rdEna := true.B
+        }
+      }
+    }
+
+
     //R-type
     is("b0110011".U){
       switch(io.funct7){
@@ -127,8 +149,6 @@ class Executer extends Module{
   }
   //io.ALUoutput := io.ALUoutput
   io.rdOutput := rdReg
-
-
 }
 
 

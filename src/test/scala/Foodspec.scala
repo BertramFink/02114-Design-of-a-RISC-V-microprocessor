@@ -13,11 +13,12 @@ class FoodSpec extends AnyFlatSpec with ChiselScalatestTester {
 
       }
       // Step N times, printing the LED value each cycle
-      for (cycle <- 1 to 14) {
+      for (cycle <- 1 to 30) {
         println(s"Cycle $cycle")
         dut.clock.step(1)
         for (i <- 1 to 8){
           print("x(" + (i-1) + "):" + s"${dut.io.testVal_s(i).peekInt()}. ")
+
         }
 
         println()

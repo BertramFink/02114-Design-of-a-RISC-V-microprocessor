@@ -21,11 +21,14 @@ class Food extends Module {
   val instrReg      = RegInit(VecInit(Seq(
     0x00100093.U(32.W),
     0x00200113.U(32.W),
-    0x00300193.U(32.W),
-    0x00400213.U(32.W),
-    0x00500293.U(32.W),
-    0x00600313.U(32.W),
-    0x002083b3.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00100023.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000183.U(32.W),
   )))
 
   fetcher.io.input    := instrReg
@@ -45,8 +48,17 @@ class Food extends Module {
   executer.io.funct3  := decoder.io.funct3
   executer.io.funct7  := decoder.io.funct7
 
+
   memorizer.io.rdInput      :=   executer.io.rdOutput
   memorizer.io.ALUinput     :=   executer.io.ALUoutput
+  memorizer.io.rdEna       :=   executer.io.rdEna
+  memorizer.io.wrEna       :=   executer.io.wrEna
+  memorizer.io.rdAddr      :=   executer.io.rdAddr
+  memorizer.io.wrAddr      :=   executer.io.wrAddr
+  memorizer.io.wrData      :=   executer.io.ALUoutput(7,0)
+
+write_backer.io.rdData := memorizer.io.rdData
+  write_backer.io.rdEnaIn := memorizer.io.rdEnaOut
   write_backer.io.rdInput   :=   memorizer.io.rdOutput
   write_backer.io.ALUinput  :=   memorizer.io.ALUoutput
 

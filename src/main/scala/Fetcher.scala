@@ -3,7 +3,7 @@ import chisel3.util._
 
 class Fetcher() extends Module {
   val io = IO(new Bundle {
-    val input = Input(Vec(7, UInt(32.W))) // Allow external input for instructions
+    val input = Input(Vec(10, UInt(32.W))) // Allow external input for instructions
     val instruction = Output(UInt(32.W))
     val index = Output(SInt(29.W))
 
