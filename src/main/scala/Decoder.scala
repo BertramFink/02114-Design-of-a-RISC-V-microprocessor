@@ -15,9 +15,19 @@ class Decoder extends Module {
     val imm_B       = Output(SInt(13.W))
     val imm_U       = Output(UInt(32.W))
     val imm_J       = Output(SInt(21.W))
+
+    val pcIn = Input(SInt(32.W))
+    val pcOut = Output(SInt(32.W))
+
   })
 
   //val imm_s = instruction(31, 25) << 5 | instruction(11, 7)
+
+  val pcReg = RegInit(0.S(32.W))
+  pcReg := io.pcIn
+  io.pcOut := io.pcIn
+  //io.pcOut := pcReg
+
 
 
   val instruction = RegInit(0.U(32.W))

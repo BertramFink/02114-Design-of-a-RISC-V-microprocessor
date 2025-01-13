@@ -14,13 +14,6 @@ class MyModule extends Module {
 // Instruction memor
 
 
-
-
-
-
-
-
-
   val cntReg = RegInit(0.U(32.W))
   val blkReg = RegInit(0.U(1.W))
 
