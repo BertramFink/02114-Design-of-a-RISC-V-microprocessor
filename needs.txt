@@ -1,0 +1,19 @@
+lbu
+lhu
+
+bne
+blt
+bge
+bltu
+bgeu
+
+
+Hazard-detection
+- Forawrding
+- Make nop's
+
+Uart
+perifarals
+
+
+
