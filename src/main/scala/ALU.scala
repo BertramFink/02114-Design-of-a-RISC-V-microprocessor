@@ -15,6 +15,9 @@ class ALU extends Module {
     val imm_J = Input(SInt(21.W))
     val imm_4 = Input(SInt(5.W))
     val out = Output(SInt(32.W))
+    val PC = Input(SInt(32.W))
+    val branchOut = Output(SInt(32.W))
+    val branchEnable = Output(Bool())
 
 
   })
@@ -30,16 +33,16 @@ class ALU extends Module {
   val imm_J = io.imm_J
   val imm_4 = io.imm_4
   val operand1 = rs1
-  val out = io.out
+  val PC = io.PC
   val group = 0
 
   val operand2 = Mux(opcode === "b0110011".U || opcode === "b0010011".U, rs2, imm_I)
 
-  switch(opcode) { //taking care of edgecases where imm(0:4) is used
+  switch(opcode) { // groups the opcodes like they are in the risc-v card
     is("b0110011".U){
       val group = 1
     }
-    is("b0010011".U) { // also groups the opcodes like they are in the risc-v card
+    is("b0010011".U) { //taking care of edgecases where imm(0:4) is used
       val group = 1
       switch(funct3) {
         is(0x1.U) {
@@ -63,13 +66,13 @@ class ALU extends Module {
       val group = 5
     }
     is("b1100111".U){
-      val group = 5
+      val group = 6
     }
     is("b0110111".U){
-      val group = 6
+      val group = 7
     }
     is("0010111".U){
-      val group = 6
+      val group = 8
     }
   }
   switch(group) {
@@ -126,30 +129,43 @@ class ALU extends Module {
   is(4.U){ //  branch
     switch(funct3){
       is(0x0.U){
-        if(rs1 == rs2){PC := PC + imm_B}
+        if(rs1 == rs2){
+          io.branchEnable := true.B
+          io.branchOut := PC + imm_B - 4.S
+        }
       }
       is(0x1.U){
-        if(rs1 != rs2){PC:= PC + imm_B}
+        if(rs1 != rs2){
+
+        }
       }
       is(0x4.U){
-        if(rs1 < rs2){ PC := PC + imm_B}
+        when(rs1 < rs2){ PC := PC + imm_B}
       }
       is(0x5.U){
-        if(rs1 >= rs2){PC := PC + imm_B}
+        when((rs1 > rs2)){
+          PC := PC + imm_B}
       }
       is(0x6.U){
-        if(rs1.asUInt < rs2.asUInt){PC := PC + imm_B}
+        when(rs1.asUInt < rs2.asUInt){PC := PC + imm_B}
       }
       is(0x7.U){
-        if(rs1.asUInt >= rs2.asUInt){PC := PC + imm_B}
+        when(rs1.asUInt >= rs2.asUInt){PC := PC + imm_B}
       }
     }
   }
-  is(5.U){ //jal and jalr
+  is(5.U){ //jal
+    io.branchOut := PC + imm_J
 
   }
-  is(6.U){ //lui and auipc
-
+  is(6.U){ //jalr
+    io.branchOut := rs1 + imm_I
+  }
+  is(7.U){ //LUI
+    io.out := ((imm_U)(19,0) << 12).asSInt
+  }
+  is(8.U){//AUIPC
+    io.out := PC + ((imm_U)(19,0) << 12).asSInt
   }
 }
 
