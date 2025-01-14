@@ -42,13 +42,11 @@ class Memorizer extends Module {
   val writeByte2 =wrDataReg(23,16).asUInt
   val writeByte3 =wrDataReg(31,24).asUInt
 
-
   io.rdData := mem.read(io.rdAddr)
 
   switch(memOpReg) {
     is(0.U) {
       io.rdData := 4.U
-
     }
     is(1.U) {
       io.rdData := Cat(0.U(24.W), readByte0)
