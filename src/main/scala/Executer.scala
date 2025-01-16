@@ -47,6 +47,9 @@ class Executer extends Module {
   val branchEnableReg = RegInit(false.B)
   val branchOutReg = RegInit(0.S(32.W))
 
+  val rdLastReg = RegInit(0.U(5.W))
+  val aluLastReg = RegInit(0.S(32.W))
+
 
   val ALUreg = RegInit(0.S(32.W))
   //val xReg = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
@@ -72,6 +75,9 @@ class Executer extends Module {
   branchEnableReg := false.B
   io.ALUoutput := 0.S
 
+  val rs1Wire = Mux(rdLastReg === rs1Reg,  aluLastReg, io.x(rs1Reg))
+  val rs2Wire = Mux(rdLastReg === rs2Reg, aluLastReg, io.x(rs2Reg))
+
 
   branchOutReg := pcReg
 
@@ -82,10 +88,10 @@ class Executer extends Module {
     is("b0010011".U) {
       switch(funct3Reg) {
         is(0x0.U) {
-          io.ALUoutput := io.x(rs1Reg) + imm_IReg
+          io.ALUoutput := rs1Wire + imm_IReg
         }
         is(0x4.U) {
-          io.ALUoutput := io.x(rs1Reg) ^ imm_IReg
+          io.ALUoutput := rs1Wire ^ imm_IReg
         }
         is(0x6.U) {
           io.ALUoutput := io.x(rs1Reg) | imm_IReg
@@ -115,11 +121,12 @@ class Executer extends Module {
 
     // S-type
     is("b0100011".U){
+
       switch(funct3Reg){
         is(0x0.U){
           io.memOp := 1.U
-          io.ALUoutput := io.x(rs2Reg)
-          io.wrAddr := (io.x(rs1Reg) + imm_SReg)(9,0)
+          io.ALUoutput := rs2Wire
+          io.wrAddr := (rs1Wire + imm_SReg)(9,0)
           io.wrEna := true.B
         }
         is(0x1.U){
@@ -140,7 +147,7 @@ class Executer extends Module {
       switch(funct3Reg){
         is(0x0.U){
           io.memOp := 1.U
-          io.rdAddr := (io.x(rs1Reg) + imm_IReg)(9,0)
+          io.rdAddr := (rs1Wire + imm_IReg)(9,0)
           io.rdEna := true.B
         }
         is(0x1.U){
@@ -163,7 +170,7 @@ class Executer extends Module {
         is(0x00.U) {
           switch(funct3Reg) {
             is(0x0.U) {
-              io.ALUoutput := io.x(rs1Reg) + io.x(rs2Reg)
+              io.ALUoutput := rs1Wire + rs2Wire
             }
             is(0x4.U) {
               io.ALUoutput := io.x(rs1Reg) ^ io.x(rs2Reg)
@@ -219,6 +226,11 @@ class Executer extends Module {
   }
 
   io.rdOutput := rdReg
+
+  rdLastReg := io.rdOutput
+  aluLastReg := io.ALUoutput
+
+
 
   io.immOut := imm_BReg
   io.pcOut := pcReg
