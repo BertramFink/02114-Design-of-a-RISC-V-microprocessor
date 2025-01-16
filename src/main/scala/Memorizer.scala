@@ -12,10 +12,10 @@ class Memorizer extends Module {
     val wrData = Input(UInt(32.W))
     val wrEna = Input(Bool())
     val rdEna = Input(Bool())
-    val rdData = Output(UInt(32.W))
+    val rdData = Output(SInt(32.W))
     val rdEnaOut = Output(Bool())
     val wrEnaOut = Output(Bool())
-    val memOp = Input(UInt(2.W))
+    val memOp = Input(UInt(3.W))
 
   })
 
@@ -42,33 +42,42 @@ class Memorizer extends Module {
   val writeByte2 =wrDataReg(23,16).asUInt
   val writeByte3 =wrDataReg(31,24).asUInt
 
-  io.rdData := mem.read(io.rdAddr)
+  io.rdData := mem.read(io.rdAddr).asSInt
 
   switch(memOpReg) {
     is(0.U) {
-      io.rdData := 4.U
+      io.rdData := 4.S
     }
     is(1.U) {
-      io.rdData := Cat(0.U(24.W), readByte0)
+      io.rdData := readByte0.asSInt
       when(wrEnaReg) {
         mem.write(wrAddrReg, writeByte0)
       }
     }
     is(2.U) {
-      io.rdData := Cat(0.U(16.W), readByte1,  readByte0)
+      io.rdData := Cat(readByte1,  readByte0).asSInt
       when(wrEnaReg) {
         mem.write(wrAddrReg, writeByte0)
         mem.write(wrAddrReg + 1.U, writeByte1)
       }
     }
     is(3.U) {
-      io.rdData := Cat(readByte3, readByte2, readByte1, readByte0)
+      io.rdData := Cat(readByte3, readByte2, readByte1, readByte0).asSInt
       when(wrEnaReg) {
         mem.write(wrAddrReg, writeByte0)
         mem.write(wrAddrReg + 1.U, writeByte1)
         mem.write(wrAddrReg+2.U, writeByte2)
         mem.write(wrAddrReg + 3.U, writeByte3)
       }
+    }
+
+    is(4.U) {
+
+      io.rdData := Cat(0.U(24.W), readByte0).asSInt
+
+    }
+    is(5.U) {
+      io.rdData := Cat(0.U(16.W), readByte1,  readByte0).asSInt
     }
   }
 }

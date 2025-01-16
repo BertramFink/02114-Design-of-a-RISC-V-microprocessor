@@ -22,7 +22,7 @@ class Executer extends Module {
     val wrAddr = Output(UInt(10.W))
     val wrEna = Output(Bool())
     val rdEna = Output(Bool())
-    val memOp =  Output(UInt(2.W))
+    val memOp =  Output(UInt(3.W))
 
     val pcIn = Input(SInt(32.W))
     val pcOut = Output(SInt(32.W))
@@ -121,44 +121,41 @@ class Executer extends Module {
 
     // S-type
     is("b0100011".U){
-
+      io.ALUoutput := rs2Wire
+      io.wrAddr := (rs1Wire + imm_SReg)(9,0)
+      io.wrEna := true.B
       switch(funct3Reg){
         is(0x0.U){
           io.memOp := 1.U
-          io.ALUoutput := rs2Wire
-          io.wrAddr := (rs1Wire + imm_SReg)(9,0)
-          io.wrEna := true.B
+
         }
         is(0x1.U){
           io.memOp := 2.U
-          io.ALUoutput := io.x(rs2Reg)
-          io.wrAddr := (io.x(rs1Reg) + imm_SReg)(9,0)
-          io.wrEna := true.B
         }
         is(0x2.U){
           io.memOp := 3.U
-          io.ALUoutput := io.x(rs2Reg)
-          io.wrAddr := (io.x(rs1Reg) + imm_SReg)(9,0)
-          io.wrEna := true.B
         }
       }
     }
     is("b0000011".U){
+      io.rdAddr := (rs1Wire + imm_IReg)(9,0)
+      io.rdEna := true.B
       switch(funct3Reg){
+
         is(0x0.U){
           io.memOp := 1.U
-          io.rdAddr := (rs1Wire + imm_IReg)(9,0)
-          io.rdEna := true.B
         }
         is(0x1.U){
           io.memOp := 2.U
-          io.rdAddr := (io.x(rs1Reg) + imm_IReg)(9,0)
-          io.rdEna := true.B
         }
         is(0x2.U){
           io.memOp := 3.U
-          io.rdAddr := (io.x(rs1Reg) + imm_IReg)(9,0)
-          io.rdEna := true.B
+        }
+        is(0x4.U){
+          io.memOp := 4.U
+        }
+        is(0x5.U){
+          io.memOp := 5.U
         }
       }
     }

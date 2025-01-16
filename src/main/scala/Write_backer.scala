@@ -10,11 +10,11 @@ class Write_backer extends Module {
     val rdOut = Output(UInt(5.W))
     val rdEnaIn = Input(Bool())
     val wrEnaIn = Input(Bool())
-    val rdData = Input(UInt(32.W))
+    val rdData = Input(SInt(32.W))
   })
   val rdReg = RegInit(0.U(5.W))
   val ALUreg = RegInit(0.S(32.W))
-  val rdDataReg = RegInit(0.U(32.W))
+  val rdDataReg = RegInit(0.S(32.W))
   val rdEnaInReg = RegInit(false.B)
   val wrEnaInReg = RegInit(false.B)
 
@@ -25,7 +25,7 @@ class Write_backer extends Module {
   wrEnaInReg := io.wrEnaIn
 
   //Output MUX
-  io.ALUoutput := Mux(rdEnaInReg, rdDataReg.asSInt, ALUreg)
+  io.ALUoutput := Mux(rdEnaInReg, rdDataReg, ALUreg)
   io.rdOut := rdReg
 
   when(wrEnaInReg || rdReg === 0.U || rdReg === 32.U) {
