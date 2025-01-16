@@ -28,7 +28,7 @@ class Decoder extends Module {
   io.pcOut := io.pcIn
   //io.pcOut := pcReg
 
-
+//
 
   val instruction = RegInit(0.U(32.W))
   instruction :=io.instruction

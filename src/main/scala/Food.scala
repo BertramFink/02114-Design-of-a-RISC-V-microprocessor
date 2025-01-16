@@ -20,13 +20,13 @@ class Food extends Module {
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
-    "hdeadc0b7".U(32.W),
-    "heef08093".U(32.W),
-    "h00102423".U(32.W),
-    "h00801103".U(32.W),
+    "h00a00093".U(32.W),
+    "h00108023".U(32.W),
+    "h00008103".U(32.W),
+    0x00000013.U(32.W),
+    0x00110113.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
-    "hfff10113".U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
   )))
@@ -53,6 +53,12 @@ class Food extends Module {
   executer.io.imm_U := decoder.io.imm_U
   executer.io.funct3 := decoder.io.funct3
   executer.io.funct7 := decoder.io.funct7
+  executer.io.rdLastRegMemIn := memorizer.io.rdLastRegMemOut
+  executer.io.aluLastRegMemIn := memorizer.io.aluLastRegMemOut
+  executer.io.rdLoadRegMemIn := memorizer.io.rdLoadRegMemOut
+  executer.io.aluLoadRegMemIn := memorizer.io.aluLoadRegMemOut
+  executer.io.loadEnable := memorizer.io.loadEnabler
+
 
   memorizer.io.memOp := executer.io.memOp
   memorizer.io.rdInput := executer.io.rdOutput
@@ -93,6 +99,6 @@ class Food extends Module {
   io.testVal_U2 := fetcher.io.instruction
 
 
-//  io.testVal_u(0) := write_backer.io.rdOut
-//  io.testVal_s(0) := write_backer.io.ALUoutput
+  //  io.testVal_u(0) := write_backer.io.rdOut
+  //  io.testVal_s(0) := write_backer.io.ALUoutput
 }

@@ -16,6 +16,11 @@ class Memorizer extends Module {
     val rdEnaOut = Output(Bool())
     val wrEnaOut = Output(Bool())
     val memOp = Input(UInt(3.W))
+    val rdLastRegMemOut = Output(UInt(5.W))
+    val aluLastRegMemOut = Output(SInt(32.W))
+    val rdLoadRegMemOut = Output(UInt(5.W))
+    val aluLoadRegMemOut = Output(SInt(32.W))
+    val loadEnabler = Output(Bool())
 
   })
 
@@ -23,6 +28,14 @@ class Memorizer extends Module {
   val ALUreg = RegNext(io.ALUinput, 0.S)
   io.rdOutput := rdReg
   io.ALUoutput := ALUreg
+
+
+  val rdLastRegMem = RegInit(0.U(5.W))
+  val aluLastRegMem = RegInit(0.S(32.W))
+  rdLastRegMem := io.rdOutput
+  aluLastRegMem := io.ALUoutput
+  io.rdLastRegMemOut := rdLastRegMem
+  io.aluLastRegMemOut := aluLastRegMem
 
   val wrEnaReg = RegNext(io.wrEna, false.B)
   val rdEnaReg = RegNext(io.rdEna, false.B)
@@ -43,7 +56,8 @@ class Memorizer extends Module {
   val writeByte3 =wrDataReg(31,24).asUInt
 
   io.rdData := mem.read(io.rdAddr).asSInt
-
+  io.rdLoadRegMemOut := 0.U
+  io.aluLoadRegMemOut := 0.S
   switch(memOpReg) {
     is(0.U) {
       io.rdData := 4.S
@@ -72,12 +86,19 @@ class Memorizer extends Module {
     }
 
     is(4.U) {
-
       io.rdData := Cat(0.U(24.W), readByte0).asSInt
-
     }
     is(5.U) {
       io.rdData := Cat(0.U(16.W), readByte1,  readByte0).asSInt
     }
   }
+  val rdLoadRegger = RegInit(0.U(5.W))
+  val aluLoadRegger = RegInit(0.S(32.W))
+  val enabler = RegInit(false.B)
+  enabler := rdEnaReg
+  io.loadEnabler := enabler
+  rdLoadRegger := rdReg
+  aluLoadRegger:= io.rdData
+  io.rdLoadRegMemOut := rdLoadRegger
+  io.aluLoadRegMemOut := aluLoadRegger
 }

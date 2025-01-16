@@ -14,21 +14,32 @@ class Executer extends Module {
     val imm_B = Input(SInt(13.W))
     val imm_U = Input(UInt(32.W))
     val imm_J = Input(SInt(21.W))
+    val x = Input(Vec(32, SInt(32.W)))
+
+    val rdLastRegMemIn = Input(UInt(5.W))
+    val aluLastRegMemIn = Input(SInt(32.W))
+    val rdLoadRegMemIn = Input(UInt(5.W))
+    val aluLoadRegMemIn = Input(SInt(32.W))
+    val loadEnable = Input(Bool())
+
     val ALUoutput = Output(SInt(32.W))
     val rdOutput = Output(UInt(5.W))
-    val x = Input(Vec(32, SInt(32.W)))
 
     val rdAddr = Output(UInt(10.W))
     val wrAddr = Output(UInt(10.W))
     val wrEna = Output(Bool())
     val rdEna = Output(Bool())
-    val memOp =  Output(UInt(3.W))
+    val memOp = Output(UInt(3.W))
 
     val pcIn = Input(SInt(32.W))
     val pcOut = Output(SInt(32.W))
+
     val branchOut = Output(SInt(32.W))
     val branchEnable = Output(Bool())
     val immOut = Output(SInt(32.W))
+
+
+
 
   })
   val opcodeReg = RegInit(0.U(7.W))
@@ -47,8 +58,8 @@ class Executer extends Module {
   val branchEnableReg = RegInit(false.B)
   val branchOutReg = RegInit(0.S(32.W))
 
-  val rdLastReg = RegInit(0.U(5.W))
-  val aluLastReg = RegInit(0.S(32.W))
+  val rdLastRegEx = RegInit(0.U(5.W))
+  val aluLastRegEx = RegInit(0.S(32.W))
 
 
   val ALUreg = RegInit(0.S(32.W))
@@ -75,9 +86,8 @@ class Executer extends Module {
   branchEnableReg := false.B
   io.ALUoutput := 0.S
 
-  val rs1Wire = Mux(rdLastReg === rs1Reg,  aluLastReg, io.x(rs1Reg))
-  val rs2Wire = Mux(rdLastReg === rs2Reg, aluLastReg, io.x(rs2Reg))
-
+  val rs1Wire = Mux(rdLastRegEx === rs1Reg, aluLastRegEx, Mux(io.rdLastRegMemIn === rs1Reg, Mux(io.loadEnable && io.rdLoadRegMemIn === rs1Reg, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs1Reg)))
+  val rs2Wire = Mux(rdLastRegEx === rs2Reg, aluLastRegEx, Mux(io.rdLastRegMemIn === rs2Reg, Mux(io.loadEnable, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs2Reg)))
 
   branchOutReg := pcReg
 
@@ -120,41 +130,40 @@ class Executer extends Module {
     }
 
     // S-type
-    is("b0100011".U){
+    is("b0100011".U) {
       io.ALUoutput := rs2Wire
-      io.wrAddr := (rs1Wire + imm_SReg)(9,0)
+      io.wrAddr := (rs1Wire + imm_SReg)(9, 0)
       io.wrEna := true.B
-      switch(funct3Reg){
-        is(0x0.U){
+      switch(funct3Reg) {
+        is(0x0.U) {
           io.memOp := 1.U
-
         }
-        is(0x1.U){
+        is(0x1.U) {
           io.memOp := 2.U
         }
-        is(0x2.U){
+        is(0x2.U) {
           io.memOp := 3.U
         }
       }
     }
-    is("b0000011".U){
-      io.rdAddr := (rs1Wire + imm_IReg)(9,0)
+    is("b0000011".U) {
+      io.rdAddr := (rs1Wire + imm_IReg)(9, 0)
       io.rdEna := true.B
-      switch(funct3Reg){
+      switch(funct3Reg) {
 
-        is(0x0.U){
+        is(0x0.U) {
           io.memOp := 1.U
         }
-        is(0x1.U){
+        is(0x1.U) {
           io.memOp := 2.U
         }
-        is(0x2.U){
+        is(0x2.U) {
           io.memOp := 3.U
         }
-        is(0x4.U){
+        is(0x4.U) {
           io.memOp := 4.U
         }
-        is(0x5.U){
+        is(0x5.U) {
           io.memOp := 5.U
         }
       }
@@ -194,11 +203,47 @@ class Executer extends Module {
         }
       }
     }
-//B-type
+    //B-type
     is("b1100011".U) {
       switch(funct3Reg) {
         is(0x0.U) {
-          when(rs1Reg === rs2Reg) {
+          when(io.x(rs1Reg) === io.x(rs2Reg)) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm_BReg - 4.S
+          }
+        }
+        is(0x1.U) {
+          when(io.x(rs1Reg) =/= io.x(rs2Reg)) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm_BReg - 4.S
+
+          }
+        }
+        is(0x4.U) {
+          when(io.x(rs1Reg) < io.x(rs2Reg)) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm_BReg - 4.S
+
+          }
+        }
+        is(0x5.U) {
+          when(io.x(rs1Reg) >= io.x(rs2Reg)) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm_BReg - 4.S
+
+          }
+        }
+        is(0x6.U) {
+          when(io.x(rs1Reg).asUInt < io.x(rs2Reg).asUInt) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm_BReg - 4.S
+
+          }
+
+        }
+
+        is(0x7.U) {
+          when(io.x(rs1Reg).asUInt >= io.x(rs2Reg).asUInt) {
             io.branchEnable := true.B
             io.branchOut := pcReg + imm_BReg - 4.S
 
@@ -207,26 +252,25 @@ class Executer extends Module {
       }
     }
     //U-type Jump and link
-    is("b1101111".U){
+    is("b1101111".U) {
       io.branchOut := pcReg + imm_JReg
     }
-    is("b1100111".U){
+    is("b1100111".U) {
       io.branchOut := io.x(rs1Reg) + imm_IReg
     }
-    is("b0110111".U){
-      io.ALUoutput := ((imm_UReg)(19,0) << 12).asSInt
+    is("b0110111".U) {
+      io.ALUoutput := ((imm_UReg)(19, 0) << 12).asSInt
     }
-    is("b0010111".U){
-      io.ALUoutput := pcReg + ((imm_UReg)(19,0) << 12).asSInt
+    is("b0010111".U) {
+      io.ALUoutput := pcReg + ((imm_UReg)(19, 0) << 12).asSInt
     }
 
   }
 
   io.rdOutput := rdReg
 
-  rdLastReg := io.rdOutput
-  aluLastReg := io.ALUoutput
-
+  rdLastRegEx := io.rdOutput
+  aluLastRegEx := io.ALUoutput
 
 
   io.immOut := imm_BReg
