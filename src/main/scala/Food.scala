@@ -21,10 +21,11 @@ class Food extends Module {
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
     "h00a00093".U(32.W),
-    "h00108023".U(32.W),
-    "h00008103".U(32.W),
-    0x00000013.U(32.W),
+    "h00102523".U(32.W),
+    "h00a02103".U(32.W),
     0x00110113.U(32.W),
+    0x00000013.U(32.W),
+
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
@@ -39,6 +40,15 @@ class Food extends Module {
   executer.io.pcIn := decoder.io.pcOut
   fetcher.io.branchIn := executer.io.branchOut
   fetcher.io.branchEnable := executer.io.branchEnable
+
+
+  decoder.io.rdRegEx := executer.io.rdOutput
+
+  decoder.io.LoadMemEnable := executer.io.rdEna
+  fetcher.io.LoadMemEnable := decoder.io.LoadMemEnable
+  fetcher.io.rs1 := decoder.io.rs1
+  fetcher.io.rs2 := decoder.io.rs2
+  fetcher.io.rdRegEx  := executer.io.rdOutput
 
 
   executer.io.x := x

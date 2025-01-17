@@ -8,9 +8,18 @@ class Fetcher() extends Module {
     val index = Output(SInt(29.W))
     val branchIn = Input(SInt(32.W))
 
+    val LoadMemEnable = Input(Bool())
+
+
+    val rs1         = Input(UInt(5.W))
+    val rs2         = Input(UInt(5.W))
+    val rdRegEx = Input(UInt(5.W))
+
+
 
     val pcOut = Output(SInt(32.W))
     val branchEnable = Input(Bool())
+
   })
 
   val pcReg = RegInit(-4.S(32.W))
@@ -24,7 +33,9 @@ class Fetcher() extends Module {
   branchEnableReg := io.branchEnable
 
 
-  val pcPlusReg = Mux(io.branchEnable, io.branchIn,   pcReg + 4.S)
+  val shouldMux = io.LoadMemEnable && ((io.rs1 === io.rdRegEx) || (io.rs2 === io.rdRegEx))
+
+  val pcPlusReg = Mux(shouldMux, pcReg,Mux(io.branchEnable, io.branchIn,   pcReg + 4.S))
 
   pcReg:= pcPlusReg
 

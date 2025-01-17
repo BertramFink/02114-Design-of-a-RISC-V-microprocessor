@@ -4,23 +4,28 @@ import chisel3.util._
 class Memorizer extends Module {
   val io = IO(new Bundle {
     val ALUinput = Input(SInt(32.W))
-    val ALUoutput = Output(SInt(32.W))
     val rdInput = Input(UInt(5.W))
-    val rdOutput = Output(UInt(5.W))
     val rdAddr = Input(UInt(10.W))
     val wrAddr = Input(UInt(10.W))
     val wrData = Input(UInt(32.W))
     val wrEna = Input(Bool())
     val rdEna = Input(Bool())
-    val rdData = Output(SInt(32.W))
-    val rdEnaOut = Output(Bool())
-    val wrEnaOut = Output(Bool())
     val memOp = Input(UInt(3.W))
+
     val rdLastRegMemOut = Output(UInt(5.W))
     val aluLastRegMemOut = Output(SInt(32.W))
     val rdLoadRegMemOut = Output(UInt(5.W))
     val aluLoadRegMemOut = Output(SInt(32.W))
     val loadEnabler = Output(Bool())
+
+    val rdData = Output(SInt(32.W))
+    val rdEnaOut = Output(Bool())
+    val wrEnaOut = Output(Bool())
+
+    val rdOutput = Output(UInt(5.W))
+    val ALUoutput = Output(SInt(32.W))
+
+
 
   })
 
