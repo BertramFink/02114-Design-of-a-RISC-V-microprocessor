@@ -21,7 +21,7 @@ class Decoder extends Module {
 
     val pcIn = Input(SInt(32.W))
     val pcOut = Output(SInt(32.W))
-
+    val shouldMux = Output(Bool())
 
 
   })
@@ -30,11 +30,18 @@ class Decoder extends Module {
   //If mem read bliver brugt  og register
 
 
+val poop1 = io.instruction(19, 15)
+  val poop2 = io.instruction(24, 20)
 
-  val shouldMux = io.LoadMemEnable && ((io.rs1 === io.rdRegEx) || (io.rs2 === io.rdRegEx))
+
+  val instruction = RegInit(0.U(32.W))
+  val loadMemEnable = (instruction(6, 0).asUInt === 3.U)
+
+
+  io.shouldMux := loadMemEnable && ((poop1 === io.rdOutput) || (poop2 === io.rdOutput))
   val boolean = RegInit(false.B)
-  boolean := shouldMux
-  val muxedInstr = Mux(shouldMux, 0x00000013.U, io.instruction)
+  boolean := io.shouldMux
+  val muxedInstr = Mux(io.shouldMux, 0x00000013.U, io.instruction)
 
 
 
@@ -45,7 +52,6 @@ class Decoder extends Module {
 
 //
 
-  val instruction = RegInit(0.U(32.W))
   instruction :=muxedInstr
   io.opcode := instruction(6, 0)
   io.rdOutput     := instruction(11, 7)

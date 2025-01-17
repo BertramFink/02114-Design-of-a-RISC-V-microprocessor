@@ -26,7 +26,6 @@ class Food extends Module {
     "h00a02103".U(32.W),
     0x00110113.U(32.W),
     0x00000013.U(32.W),
-
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
@@ -46,10 +45,10 @@ class Food extends Module {
   decoder.io.rdRegEx := executer.io.rdOutput
 
   decoder.io.LoadMemEnable := executer.io.rdEna
-  fetcher.io.LoadMemEnable := decoder.io.LoadMemEnable
-  fetcher.io.rs1 := decoder.io.rs1
-  fetcher.io.rs2 := decoder.io.rs2
-  fetcher.io.rdRegEx  := executer.io.rdOutput
+
+  fetcher.io.shouldMux := decoder.io.shouldMux
+
+
 
 
   executer.io.x := x
