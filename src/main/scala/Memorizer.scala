@@ -25,13 +25,12 @@ class Memorizer extends Module {
     val rdOutput = Output(UInt(5.W))
     val ALUoutput = Output(SInt(32.W))
 
-    //test
-    val ALUtest = Input(SInt(32.W))
+
+
 
 
   })
-  //test
-val ALUtest = io.ALUtest
+
 
 
 
@@ -43,6 +42,7 @@ val ALUtest = io.ALUtest
 
   val rdLastRegMem = RegInit(0.U(5.W))
   val aluLastRegMem = RegInit(0.S(32.W))
+
   rdLastRegMem := io.rdOutput
   aluLastRegMem := io.ALUoutput
   io.rdLastRegMemOut := rdLastRegMem

@@ -21,10 +21,10 @@ class Food extends Module {
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
-    "h00a00093".U(32.W),
-    "h00102523".U(32.W),
-    "h00a02103".U(32.W),
-    0x00110113.U(32.W),
+    0x00a00093.U(32.W),
+    0x00102223.U(32.W),
+    0x00402103.U(32.W),
+    0x00210113.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
@@ -38,13 +38,13 @@ class Food extends Module {
 
   decoder.io.pcIn := fetcher.io.pcOut
   executer.io.pcIn := decoder.io.pcOut
-  fetcher.io.branchIn := executer.io.branchOut
-  fetcher.io.branchEnable := executer.io.branchEnable
+  fetcher.io.branchIn := ALU.io.branchOut
+  fetcher.io.branchEnable := ALU.io.branchEnable
 
 
   decoder.io.rdRegEx := executer.io.rdOutput
 
-  decoder.io.LoadMemEnable := executer.io.rdEna
+  decoder.io.LoadMemEnable := ALU.io.rdEna
 
   fetcher.io.shouldMux := decoder.io.shouldMux
 
@@ -63,37 +63,44 @@ class Food extends Module {
   executer.io.imm_U := decoder.io.imm_U
   executer.io.funct3 := decoder.io.funct3
   executer.io.funct7 := decoder.io.funct7
+
+
   executer.io.rdLastRegMemIn := memorizer.io.rdLastRegMemOut
+
   executer.io.aluLastRegMemIn := memorizer.io.aluLastRegMemOut
+
   executer.io.rdLoadRegMemIn := memorizer.io.rdLoadRegMemOut
   executer.io.aluLoadRegMemIn := memorizer.io.aluLoadRegMemOut
   executer.io.loadEnable := memorizer.io.loadEnabler
 
-  ALU.io.funct3 := decoder.io.funct3
-  ALU.io.funct7 := decoder.io.funct7
+  ALU.io.funct3 := executer.io.funct3out
+  ALU.io.funct7 := executer.io.funct7out
   ALU.io.rs1 := decoder.io.rs1
   ALU.io.rs2 := decoder.io.rs2
-  ALU.io.imm_I := decoder.io.imm_I
-  ALU.io.imm_B := decoder.io.imm_B
-  ALU.io.imm_J := decoder.io.imm_J
-  ALU.io.imm_S := decoder.io.imm_S
-  ALU.io.imm_U := decoder.io.imm_U
+//ALU.io.imm_I := decoder.io.imm_I
+  //ALU.io.imm_B := decoder.io.imm_B
+  //ALU.io.imm_J := decoder.io.imm_J
+  //ALU.io.imm_S := decoder.io.imm_S
+  //ALU.io.imm_U := decoder.io.imm_U
   ALU.io.PC := decoder.io.pcOut
   ALU.io.group := executer.io.group
   ALU.io.operand1 := executer.io.operand1
   ALU.io.operand2 := executer.io.operand2
+  ALU.io.imm := executer.io.imm
 
 
-  memorizer.io.memOp := executer.io.memOp
+  executer.io.ALUIn := ALU.io.ALUout
+
+
+  memorizer.io.memOp := ALU.io.memOp
   memorizer.io.rdInput := executer.io.rdOutput
-  memorizer.io.ALUinput := executer.io.ALUoutput
-  memorizer.io.rdEna := executer.io.rdEna
-  memorizer.io.wrEna := executer.io.wrEna
-  memorizer.io.rdAddr := executer.io.rdAddr
-  memorizer.io.wrAddr := executer.io.wrAddr
-  memorizer.io.wrData := executer.io.ALUoutput.asUInt
- //test
-  memorizer.io.ALUtest := ALU.io.out
+  memorizer.io.ALUinput := ALU.io.ALUout
+  memorizer.io.rdEna := ALU.io.rdEna
+  memorizer.io.wrEna := ALU.io.wrEna
+  memorizer.io.rdAddr := ALU.io.rdAddr
+  memorizer.io.wrAddr := ALU.io.wrAddr
+  memorizer.io.wrData := ALU.io.ALUout.asUInt
+
 
 
 
@@ -118,10 +125,9 @@ class Food extends Module {
     io.testVal_s(i) := x(i-1)
   }
   io.testVal_u(0) := fetcher.io.pcOut
-  io.testVal_u(1) := executer.io.immOut
   io.testVal_u(2) := executer.io.pcOut
   io.testVal_u(3) := decoder.io.pcOut
-  io.testVal_u(4) := executer.io.branchOut
+  io.testVal_u(4) := ALU.io.branchOut
   io.testVal_u(6) := fetcher.io.index
 
   io.testVal_U2 := fetcher.io.instruction
