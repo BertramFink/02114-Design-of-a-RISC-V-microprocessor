@@ -5,13 +5,6 @@ class ALU extends Module {
   val io = IO(new Bundle {
     val funct3 = Input(UInt(3.W))
     val funct7 = Input(UInt(7.W))
-    val rs1 = Input(UInt(5.W))
-    val rs2 = Input(UInt(5.W))
-   // val imm_I = Input(SInt(12.W))
-    //val imm_S = Input(SInt(12.W))
-   // val imm_B = Input(SInt(13.W))
-   // val imm_U = Input(UInt(32.W))
-   // val imm_J = Input(SInt(21.W))
     val imm = Input(SInt(32.W))
     val PC = Input(SInt(32.W))
     val group = Input(UInt(2.W))
@@ -34,14 +27,6 @@ class ALU extends Module {
   })
   val funct3 = io.funct3
   val funct7 = io.funct7
-  val rs1 = io.rs1
-  val rs2 = io.rs2
- // val imm_I = io.imm_I
- // val imm_S = io.imm_S
- // val imm_B = io.imm_B
- // val imm_U = io.imm_U
-  //val imm_J = io.imm_J
-  val imm_4 = io.rs2
   val PC = io.PC
   val group = io.group
   val operand1 = io.operand1

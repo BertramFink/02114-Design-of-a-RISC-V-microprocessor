@@ -75,14 +75,7 @@ class Food extends Module {
 
   ALU.io.funct3 := executer.io.funct3out
   ALU.io.funct7 := executer.io.funct7out
-  ALU.io.rs1 := decoder.io.rs1
-  ALU.io.rs2 := decoder.io.rs2
-//ALU.io.imm_I := decoder.io.imm_I
-  //ALU.io.imm_B := decoder.io.imm_B
-  //ALU.io.imm_J := decoder.io.imm_J
-  //ALU.io.imm_S := decoder.io.imm_S
-  //ALU.io.imm_U := decoder.io.imm_U
-  ALU.io.PC := decoder.io.pcOut
+  ALU.io.PC := executer.io.pcOut
   ALU.io.group := executer.io.group
   ALU.io.operand1 := executer.io.operand1
   ALU.io.operand2 := executer.io.operand2
