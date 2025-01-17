@@ -68,7 +68,8 @@ class ALU extends Module {
           io.ALUout := operand1.asSInt & operand2
         }
         is(0x1.U) {
-          // io.ALUout := (operand1.asUInt << operand2.asUInt).asSInt  får error med shift ammount skal være under 20.
+
+          io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
         }
         is(0x5.U) {
 
