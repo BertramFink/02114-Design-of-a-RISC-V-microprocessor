@@ -26,8 +26,8 @@ class Food extends Module {
 
     0xdeadc0b7L.U(32.W),
     0xeef08093L.U(32.W),
-    0x00a00113.U(32.W),
-    0x00200193.U(32.W),
+    0x00200113.U(32.W),
+    0x00a00193.U(32.W),
     0x0021d233.U(32.W),
     0x4021d333.U(32.W),
     0x003122b3.U(32.W),
