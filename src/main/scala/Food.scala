@@ -7,7 +7,6 @@ object Food extends App {
 
 class Food extends Module {
   val io = IO(new Bundle {
-    val x3iszero = Output(Bool())
     val testVal_s = Output(Vec(9, SInt(32.W))) // Allow external input for instructions
     val testVal_u = Output(Vec(9, SInt(32.W)))
     val testVal_U2 = Output(UInt(32.W))
