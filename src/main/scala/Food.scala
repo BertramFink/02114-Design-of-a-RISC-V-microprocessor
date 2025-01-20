@@ -24,18 +24,18 @@ class Food extends Module {
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
 
-    0xdeadc0b7L.U(32.W),
-    0xeef08093L.U(32.W),
-    0x00a00113.U(32.W),
-    0x00200193.U(32.W),
-    0x0021d233.U(32.W),
-    0x4021d333.U(32.W),
-    0x003122b3.U(32.W),
-    0x0021a2b3.U(32.W),
-    0x0021b333.U(32.W),
-    0x00a14093.U(32.W),
-    0x0051e113.U(32.W),
-    0x1f417093.U(32.W),
+    0x00300093.U(32.W),
+    0x00100133.U(32.W),
+    0x00108663.U(32.W),
+    0x00500093.U(32.W),
+    0x00500113.U(32.W),
+    0xffc10193L.U(32.W),
+    0x40310233L.U(32.W),
+    0x002182b3L.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
   )))
 
   fetcher.io.input    := instrReg
@@ -44,11 +44,14 @@ class Food extends Module {
 
   decoder.io.pcIn := fetcher.io.pcOut
   executer.io.pcIn := decoder.io.pcOut
+
+  executer.io.rdIn := ALU.io.rdOut
+
   fetcher.io.branchIn := ALU.io.branchOut
   fetcher.io.branchEnable := ALU.io.branchEnable
 
 
-  decoder.io.rdRegEx := executer.io.rdOutput
+  decoder.io.rdRegEx := ALU.io.rdOut
 
   decoder.io.LoadMemEnable := ALU.io.rdEna
 
@@ -59,7 +62,7 @@ class Food extends Module {
 
   executer.io.x := x
   executer.io.opcode := decoder.io.opcode
-  executer.io.rdInput := decoder.io.rdOutput
+  ALU.io.rdIn := decoder.io.rdOutput
   executer.io.rs1 := decoder.io.rs1
   executer.io.rs2 := decoder.io.rs2
   executer.io.imm_I := decoder.io.imm_I
@@ -81,7 +84,7 @@ class Food extends Module {
 
   ALU.io.funct3 := executer.io.funct3out
   ALU.io.funct7 := executer.io.funct7out
-  ALU.io.PC := executer.io.pcOut
+  ALU.io.pcIn := executer.io.pcOut
   ALU.io.group := executer.io.group
   ALU.io.operand1 := executer.io.operand1
   ALU.io.operand2 := executer.io.operand2
@@ -92,7 +95,7 @@ class Food extends Module {
 
 
   memorizer.io.memOp := ALU.io.memOp
-  memorizer.io.rdInput := executer.io.rdOutput
+  memorizer.io.rdInput := ALU.io.rdOut
   memorizer.io.ALUinput := ALU.io.ALUout
   memorizer.io.rdEna := ALU.io.rdEna
   memorizer.io.wrEna := ALU.io.wrEna

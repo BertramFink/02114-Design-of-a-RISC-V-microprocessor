@@ -6,7 +6,7 @@ class ALU extends Module {
     val funct3 = Input(UInt(3.W))
     val funct7 = Input(UInt(7.W))
     val imm = Input(SInt(32.W))
-    val PC = Input(SInt(32.W))
+    val pcIn = Input(SInt(32.W))
     val group = Input(UInt(4.W))
 
     val operand2 = Input(SInt(32.W))
@@ -23,11 +23,13 @@ class ALU extends Module {
     val rdEna = Output(Bool())
     val memOp = Output(UInt(3.W))
 
+    val rdOut = Output(UInt(5.W))
+    val rdIn = Input(UInt(5.W))
 
   })
   val funct3 = io.funct3
   val funct7 = io.funct7
-  val PC = io.PC
+  val pcReg = io.pcIn
   val group = io.group
   val operand1 = io.operand1
   val operand2 = io.operand2
@@ -42,7 +44,7 @@ class ALU extends Module {
   io.ALUout := 0.S
   io.branchOut := 0.S
   io.branchEnable := false.B
-  io.pcOut := PC
+  io.pcOut := pcReg
 
 
   switch(group) {
@@ -132,46 +134,46 @@ class ALU extends Module {
         is(0x0.U) {
           when(operand1 === operand2) {
             io.branchEnable := true.B
-            io.branchOut := PC + imm - 4.S
+            io.branchOut := pcReg + imm - 4.S
           }
         }
         is(0x1.U) {
           when(operand1 =/= operand2) {
             io.branchEnable := true.B
-            io.branchOut := PC + imm - 4.S
+            io.branchOut := pcReg + imm - 4.S
 
           }
         }
         is(0x4.U) {
           when(operand1 < operand2) {
             io.branchEnable := true.B
-            io.branchOut := PC + imm - 4.S
+            io.branchOut := pcReg + imm - 4.S
           }
         }
         is(0x5.U) {
           when(operand1 >= operand2) {
             io.branchEnable := true.B
-            io.branchOut := PC + imm - 4.S
+            io.branchOut := pcReg + imm - 4.S
           }
         }
 
           is(0x6.U) {
             when(operand1 < operand2) {
               io.branchEnable := true.B
-              io.branchOut := PC + imm - 4.S
+              io.branchOut := pcReg + imm - 4.S
             }
           }
           is(0x7.U) {
             when(operand1.asUInt >= operand2.asUInt) {
               io.branchEnable := true.B
-              io.branchOut := PC + imm - 4.S
+              io.branchOut := pcReg + imm - 4.S
             }
           }
         }
       }
 
     is(5.U) { //jal
-      io.branchOut := PC + imm
+      io.branchOut := pcReg + imm
 
     }
     is(6.U) { //jalr
@@ -180,11 +182,20 @@ class ALU extends Module {
     is(7.U) { //LUI
       io.ALUout := ((imm)(19, 0) << 12).asSInt
     }
-    is(8.U) { //AUIPC
-      io.ALUout := PC + ((imm)(19, 0) << 12).asSInt
+    is(8.U) { //AUIpcReg
+      io.ALUout := pcReg + ((imm)(19, 0) << 12).asSInt
 
     }
   }
+  val cntReg = RegInit(0.U)
+
+
+  val cntNext = Mux(io.branchEnable, 2.U, cntReg)         // if branch, set to 2, otherwise stay the same
+  val cntNext2 = Mux(cntNext > 0.U, cntNext - 1.U, cntNext) // if >0, decrement, else stay the same
+  cntReg := cntNext2
+
+  val rdReg = RegNext(Mux(pcReg > (pcReg + imm - 4.S), io.rdIn, Mux((cntReg > 0.U )|| io.branchEnable, 0.U,io.rdIn)))
+  io.rdOut:= rdReg
 
 }
 
