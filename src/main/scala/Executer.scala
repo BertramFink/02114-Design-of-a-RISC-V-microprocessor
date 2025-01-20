@@ -4,9 +4,9 @@ import chisel3.util._
 class Executer extends Module {
   val io = IO(new Bundle {
     val opcode = Input(UInt(7.W))
-    val rdInput = Input(UInt(5.W))
     val funct3 = Input(UInt(3.W))
     val funct7 = Input(UInt(7.W))
+    val rdIn = Input(UInt(5.W))
 
     val rs1 = Input(UInt(5.W))
     val rs2 = Input(UInt(5.W))
@@ -33,16 +33,8 @@ class Executer extends Module {
     val aluLoadRegMemIn = Input(SInt(32.W))
     val loadEnable = Input(Bool())
 
-    val rdOutput = Output(UInt(5.W))
-
-
-
-
     val pcIn = Input(SInt(32.W))
     val pcOut = Output(SInt(32.W))
-
-
-
 
   })
   val opcodeReg = RegInit(0.U(7.W))
@@ -69,7 +61,6 @@ class Executer extends Module {
   //val xReg = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
   //xReg := io.x
   opcodeReg := io.opcode
-  rdReg := io.rdInput
   funct3Reg := io.funct3
   rs1Reg := io.rs1
   rs2Reg := io.rs2
@@ -151,9 +142,8 @@ class Executer extends Module {
     }
   }
 
-  io.rdOutput := rdReg
 
-  rdLastRegEx := io.rdOutput
+  rdLastRegEx := io.rdIn
   aluLastRegEx := io.ALUIn
 
 
