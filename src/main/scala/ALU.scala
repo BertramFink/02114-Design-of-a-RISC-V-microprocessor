@@ -49,10 +49,8 @@ class ALU extends Module {
     is(1.U) { // R and I types
       switch(funct3) { // does all the simple R and I type instructions
         is(0x0.U) {
+          io.ALUout := operand1.asSInt + operand2
           switch(funct7) {
-            is(0x0.U) {
-              io.ALUout := operand1.asSInt + operand2
-            }
             is(0x20.U) {
               io.ALUout := operand1.asSInt - operand2
             }
@@ -69,7 +67,7 @@ class ALU extends Module {
         }
         is(0x1.U) {
 
-          io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
+         // io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
         }
         is(0x5.U) {
 

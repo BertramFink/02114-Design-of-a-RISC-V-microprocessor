@@ -7,11 +7,14 @@ object Food extends App {
 
 class Food extends Module {
   val io = IO(new Bundle {
+    val x3iszero = Output(Bool())
     val testVal_s = Output(Vec(9, SInt(32.W))) // Allow external input for instructions
     val testVal_u = Output(Vec(9, SInt(32.W)))
     val testVal_U2 = Output(UInt(32.W))
 
   })
+
+
 
   val x = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
   val fetcher       = Module(new Fetcher)
@@ -21,10 +24,10 @@ class Food extends Module {
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
-    0x00a00093.U(32.W),
-    0x00102223.U(32.W),
-    0x00402103.U(32.W),
-    0x00210113.U(32.W),
+    0xfff00193L.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
+    0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
