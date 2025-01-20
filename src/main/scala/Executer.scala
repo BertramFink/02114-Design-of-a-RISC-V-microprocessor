@@ -23,7 +23,7 @@ class Executer extends Module {
 
     val ALUIn = Input(SInt(32.W))
 
-    val group = Output(UInt(2.W))
+    val group = Output(UInt(4.W))
     val operand1 = Output(SInt(32.W))
     val operand2 = Output(SInt(32.W))
 
@@ -106,11 +106,14 @@ class Executer extends Module {
     is("b0010011".U) { //taking care of edgecases where imm(0:4) is used
       io.group := 1.U
       io.operand2 := imm_IReg
+      io.funct7out := 0.U
       switch(funct3Reg) {
         is(0x1.U) {
+          io.funct7out := funct7Reg
           io.operand2 := rs2Reg.asSInt //same as imm_4
         }
         is(0x5.U) {
+          io.funct7out := funct7Reg
           io.operand2 := rs2Reg.asSInt //same as imm_4
         }
       }

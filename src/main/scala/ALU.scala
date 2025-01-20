@@ -7,7 +7,7 @@ class ALU extends Module {
     val funct7 = Input(UInt(7.W))
     val imm = Input(SInt(32.W))
     val PC = Input(SInt(32.W))
-    val group = Input(UInt(2.W))
+    val group = Input(UInt(4.W))
 
     val operand2 = Input(SInt(32.W))
     val operand1 = Input(SInt(32.W))
@@ -67,7 +67,7 @@ class ALU extends Module {
         }
         is(0x1.U) {
 
-         // io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
+          io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
         }
         is(0x5.U) {
 
