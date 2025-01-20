@@ -23,15 +23,19 @@ class Food extends Module {
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
   val instrReg      = RegInit(VecInit(Seq(
+
     0xdeadc0b7L.U(32.W),
     0xeef08093L.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
+    0x00a00113.U(32.W),
+    0x00200193.U(32.W),
+    0x0021d233.U(32.W),
+    0x4021d333.U(32.W),
+    0x003122b3.U(32.W),
+    0x0021a2b3.U(32.W),
+    0x0021b333.U(32.W),
+    0x00a14093.U(32.W),
+    0x0051e113.U(32.W),
+    0x1f417093.U(32.W),
   )))
 
   fetcher.io.input    := instrReg

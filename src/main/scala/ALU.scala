@@ -70,16 +70,15 @@ class ALU extends Module {
           io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
         }
         is(0x5.U) {
+         // io.ALUout := 3.S
+          io.ALUout := (operand1.asUInt >> operand2.asUInt).asSInt
 
-          switch(funct7) {
-            is(0x00.U) {
-              io.ALUout := (operand1.asUInt >> operand2.asUInt).asSInt
-            }
-            is(0x20.U) {
+          when(funct7=== 0x20.U) {
               io.ALUout := operand1 >> operand2.asUInt
+            //io.ALUout := 5.S
             }
           }
-        }
+
         is(0x2.U) {
           io.ALUout := Mux(operand1.asSInt < operand2, 1.S, 0.S)
         }
@@ -186,6 +185,7 @@ class ALU extends Module {
 
     }
   }
+
 }
 
 
