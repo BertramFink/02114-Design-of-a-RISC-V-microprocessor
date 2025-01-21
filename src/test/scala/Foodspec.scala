@@ -3,7 +3,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class FoodSpec extends AnyFlatSpec with ChiselScalatestTester {
   "Hello" should "just print the testVal" in {
-    test(new Food()) { dut =>
+    test(new FoodTest()) { dut =>
       // Disable the default test timeout
       dut.clock.setTimeout(0)
 
