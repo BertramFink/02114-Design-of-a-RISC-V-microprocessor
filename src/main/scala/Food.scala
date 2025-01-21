@@ -9,6 +9,9 @@ class Food(maxCount: Int) extends Module {
   val io = IO(new Bundle {
     val seg = Output(UInt(7.W))
     val an = Output(UInt(8.W))
+    val switchin = Input(UInt(1.W))
+    val switchin2 = Input(UInt(1.W))
+    val switchin3 = Input(UInt(1.W))
 
   })
 
@@ -112,16 +115,38 @@ class Food(maxCount: Int) extends Module {
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
-  when(x(2) === 0xdeadbeef.S){
-    x(3):= 0xdeadbeef.S
+val switches = Cat(io.switchin,io.switchin2,io.switchin3)
+  Disp.io.xReg := 0.S
+  switch (switches){
+    is("b000".U){
+      Disp.io.xReg := x(0)
+    }
+    is("b001".U){
+      Disp.io.xReg := x(1)
+    }
+    is("b010".U){
+      Disp.io.xReg := x(2)
+    }
+    is("b011".U){
+      Disp.io.xReg := x(3)
+    }
+    is("b100".U){
+      Disp.io.xReg := x(4)
+
+    }
+    is("b101".U){
+      Disp.io.xReg := x(5)
+    }
+    is("b110".U){
+      Disp.io.xReg := x(6)
+
+    }
+    is("b111".U){
+      Disp.io.xReg := x(7)
+
+    }
+
   }
-
-
-  //  io.testVal_u(0) := write_backer.io.rdOut
-  //  io.testVal_s(0) := write_backer.io.ALUoutput
-
-
-  Disp.io.xReg := x(17)
   io.seg := Disp.io.seg
   io.an := Disp.io.an
 

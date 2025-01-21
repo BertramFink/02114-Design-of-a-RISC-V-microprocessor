@@ -117,12 +117,7 @@ class Memorizer extends Module {
       }
     }
     is(3.U) {
-
-      io.rdData := 0.S
-      switch(offset) {
-        is(0.U) {
           io.rdData := Cat(readByte3, readByte2, readByte1, readByte0).asSInt
-
           when(wrEnaReg) {
 
             mem(0).write(wrAddrReg >> 2, writeByte0)
@@ -130,35 +125,6 @@ class Memorizer extends Module {
             mem(2).write(wrAddrReg >> 2, writeByte2)
             mem(3).write(wrAddrReg >> 2, writeByte3)
           }
-        }
-        is(1.U) {
-          io.rdData := Cat(0.U(8.W),readByte3, readByte2, readByte1).asSInt
-          when(wrEnaReg) {
-
-            mem(1).write(wrAddrReg >> 2, writeByte0)
-            mem(2).write(wrAddrReg >> 2, writeByte1)
-            mem(3).write(wrAddrReg >> 2, writeByte2)
-          }
-
-        }
-        is(2.U) {
-          io.rdData := Cat(readByte3, readByte2).asSInt
-
-          when(wrEnaReg) {
-
-            mem(2).write(wrAddrReg >> 2, writeByte0)
-            mem(3).write(wrAddrReg >> 2, writeByte1)
-          }
-        }
-        is(3.U) {
-          io.rdData := readByte3.asSInt
-          when(wrEnaReg) {
-
-            mem(3).write(wrAddrReg >> 2, writeByte0)
-
-          }
-        }
-      }
     }
 
     is(4.U) {
