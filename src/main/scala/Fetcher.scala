@@ -21,11 +21,11 @@ class Fetcher() extends Module {
   branchInReg := io.branchIn
   branchEnableReg := io.branchEnable
 
-  val pcPlusReg = Mux(io.shouldMux, pcReg,Mux(io.branchEnable, io.branchIn,   pcReg + 4.S))
+  val pcPlusReg = Mux(io.shouldMux, pcReg, Mux(io.branchEnable, io.branchIn, pcReg + 4.S))
   val index = ((pcPlusReg) >> 2)
 
-  pcReg:= pcPlusReg
-  instr := io.instrIn(index(29,0)).asUInt
+  pcReg := pcPlusReg
+  instr := io.instrIn(index(29, 0)).asUInt
 
   io.instrOut := instr
   io.pcOut := pcReg

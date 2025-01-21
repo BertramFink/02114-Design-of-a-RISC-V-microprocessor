@@ -170,13 +170,17 @@ class ALU extends Module {
           }
         }
       }
-
     is(5.U) { //jal
-      io.branchOut := pcReg + imm
+      io.branchOut := pcReg + imm - 4.S
+      io.branchEnable := true.B
+      io.ALUout := pcReg
+
 
     }
     is(6.U) { //jalr
+      io.branchEnable := true.B
       io.branchOut := operand1 + imm
+      io.ALUout := pcReg
     }
     is(7.U) { //LUI
       io.ALUout := ((imm)(19, 0) << 12).asSInt
@@ -190,13 +194,13 @@ class ALU extends Module {
 
   val cntReg = RegInit(0.U)
 
-  val cntNext = Mux(((io.branchEnable && (io.imm >= 12.S))) || ((io.branchEnable && (io.imm === 0.S))), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U)))         // if branch, set to 2, otherwise stay the same
-  val rdReg = RegNext(Mux(cntReg > 0.U, 0.U, Mux((imm > 4.S && io.branchEnable) || (imm === 0.S && io.branchEnable), 0.U, io.rdIn)))
+  val cntNext = Mux(((io.branchEnable && (io.imm >= 12.S)))  ((io.branchEnable && (io.imm === 0.S))), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U)))         // if branch, set to 2, otherwise stay the same
+  val rdReg = RegNext(Mux(cntReg > 0.U, 0.U, Mux((imm > 4.S && io.branchEnable)  (imm === 0.S && io.branchEnable), 0.U, io.rdIn)))
   val cntNext2 = Mux(cntNext > 0.U, cntNext - 1.U, cntNext) // if >0, decrement, else stay the same
   cntReg := cntNext2
 
-  io.rdOut:= rdReg
-
+  val rdJarReg = RegNext(io.rdIn)
+  io.rdOut:= Mux(group === 6.U || group === 5.U, rdJarReg, rdReg)
 
 }
 

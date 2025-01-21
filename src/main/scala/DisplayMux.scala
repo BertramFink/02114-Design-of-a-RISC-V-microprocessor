@@ -29,7 +29,7 @@ class DisplayMux(maxCount: Int) extends Module {
   switch(cnt3) {
     is(0.U) { dec.io.in := io.xReg(3, 0) }
     is(1.U) { dec.io.in := io.xReg(7, 4) }
-    is(2.U) { dec.io.in := io.xReg(11, 5) }
+    is(2.U) { dec.io.in := io.xReg(11, 8) }
     is(3.U) { dec.io.in := io.xReg(15, 12) }
     is(4.U) { dec.io.in := io.xReg(19, 16) }
     is(5.U) { dec.io.in := io.xReg(23, 20) }

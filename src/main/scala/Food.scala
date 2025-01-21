@@ -16,30 +16,30 @@ class Food(maxCount: Int) extends Module {
   })
 
 
-
   val x = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
-  val fetcher       = Module(new Fetcher)
-  val decoder       = Module(new Decoder)
-  val executer      = Module(new Executer)
-  val ALU           = Module(new ALU)
-  val memorizer     = Module(new Memorizer)
-  val write_backer  = Module(new Write_backer)
-  val Disp          = Module(new DisplayMux(maxCount))
-  val instrReg      = RegInit(VecInit(Seq(
-    0xdeadc0b7L.U(32.W),
-    0xeef08093L.U(32.W),
-    0x00102023.U(32.W),
-    0x00002103.U(32.W),
-    0xa55b08b7L.U(32.W),
-    0x0b588893L.U(32.W),
+  val fetcher = Module(new Fetcher)
+  val decoder = Module(new Decoder)
+  val executer = Module(new Executer)
+  val ALU = Module(new ALU)
+  val memorizer = Module(new Memorizer)
+  val write_backer = Module(new Write_backer)
+  val Disp = Module(new DisplayMux(maxCount))
+  val instrReg = RegInit(VecInit(Seq(
     0x00000063.U(32.W),
-    0x00100093.U(32.W),
-    0x00000013.U(32.W),
+    0xcafec1b7L.U(32.W),
+    0xabe18193L.U(32.W),
+    0x00c000efL.U(32.W),
+    0x0000006fL.U(32.W),
+    0x00500393L.U(32.W),
+    0xdeadc137L.U(32.W),
+    0xeef10113L.U(32.W),
+    0x00008067L.U(32.W),
+
   )))
 
-  fetcher.io.instrIn    := instrReg
+  fetcher.io.instrIn := instrReg
 
-  decoder.io.instrIn   := fetcher.io.instrOut
+  decoder.io.instrIn := fetcher.io.instrOut
 
   decoder.io.pcIn := fetcher.io.pcOut
   executer.io.pcIn := decoder.io.pcOut
@@ -55,8 +55,6 @@ class Food(maxCount: Int) extends Module {
   decoder.io.LoadMemEnable := ALU.io.rdEna
 
   fetcher.io.shouldMux := decoder.io.shouldMux
-
-
 
 
   executer.io.x := x
@@ -91,8 +89,6 @@ class Food(maxCount: Int) extends Module {
 
 
   executer.io.ALUIn := ALU.io.ALUout
-
-
   memorizer.io.memOp := ALU.io.memOp
   memorizer.io.rdInput := ALU.io.rdOut
   memorizer.io.ALUinput := ALU.io.ALUout
@@ -101,8 +97,6 @@ class Food(maxCount: Int) extends Module {
   memorizer.io.rdAddr := ALU.io.rdAddr
   memorizer.io.wrAddr := ALU.io.wrAddr
   memorizer.io.wrData := ALU.io.ALUout.asUInt
-
-
 
 
   write_backer.io.rdData := memorizer.io.rdData
@@ -115,33 +109,33 @@ class Food(maxCount: Int) extends Module {
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
-val switches = Cat(io.switchin,io.switchin2,io.switchin3)
+  val switches = Cat(io.switchin, io.switchin2, io.switchin3)
   Disp.io.xReg := 0.S
-  switch (switches){
-    is("b000".U){
+  switch(switches) {
+    is("b000".U) {
       Disp.io.xReg := x(0)
     }
-    is("b001".U){
+    is("b001".U) {
       Disp.io.xReg := x(1)
     }
-    is("b010".U){
+    is("b010".U) {
       Disp.io.xReg := x(2)
     }
-    is("b011".U){
+    is("b011".U) {
       Disp.io.xReg := x(3)
     }
-    is("b100".U){
+    is("b100".U) {
       Disp.io.xReg := x(4)
 
     }
-    is("b101".U){
+    is("b101".U) {
       Disp.io.xReg := x(5)
     }
-    is("b110".U){
+    is("b110".U) {
       Disp.io.xReg := x(6)
 
     }
-    is("b111".U){
+    is("b111".U) {
       Disp.io.xReg := x(7)
 
     }
