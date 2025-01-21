@@ -2,14 +2,17 @@ import chisel3._
 import chisel3.util._
 
 object Food extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Food(100000))
+  emitVerilog(new Food(100000))
 }
 
 class Food(maxCount: Int) extends Module {
   val io = IO(new Bundle {
     val seg = Output(UInt(7.W))
     val an = Output(UInt(8.W))
+
   })
+
+
 
   val x = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
   val fetcher       = Module(new Fetcher)
@@ -18,27 +21,20 @@ class Food(maxCount: Int) extends Module {
   val ALU           = Module(new ALU)
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
-  val Disp = Module(new DisplayMux(maxCount))
+  val Disp          = Module(new DisplayMux(maxCount))
   val instrReg      = RegInit(VecInit(Seq(
-
-    0x00200113.U(32.W),
-    0x00a00193.U(32.W),
-    0x00310663.U(32.W),
-    0x00200293.U(32.W),
-    0x00210263.U(32.W),
-    0x00c00113.U(32.W),
-    0x00211a63.U(32.W),
-    0x00300293.U(32.W),
-    0x00311663.U(32.W),
-    0x00a00213.U(32.W),
-    0x00a00293.U(32.W),
-    0x00100113.U(32.W),
-    0x00e00293.U(32.W),
+    0xdeadc0b7L.U(32.W),
+    0xeef08093L.U(32.W),
+    0x00102023.U(32.W),
+    0x00002103.U(32.W),
+    0xa55b08b7L.U(32.W),
+    0x0b588893L.U(32.W),
+    0x00000063.U(32.W),
+    0x00100093.U(32.W),
+    0x00000013.U(32.W),
   )))
 
   fetcher.io.input    := instrReg
-  fetcher.io.branchIn := ALU.io.branchOut
-  fetcher.io.branchEnable := ALU.io.branchEnable
 
   decoder.io.instruction := fetcher.io.instruction
 
@@ -46,6 +42,9 @@ class Food(maxCount: Int) extends Module {
   executer.io.pcIn := decoder.io.pcOut
 
   executer.io.rdIn := ALU.io.rdOut
+
+  fetcher.io.branchIn := ALU.io.branchOut
+  fetcher.io.branchEnable := ALU.io.branchEnable
 
 
   decoder.io.rdRegEx := ALU.io.rdOut
@@ -101,13 +100,27 @@ class Food(maxCount: Int) extends Module {
   memorizer.io.wrData := ALU.io.ALUout.asUInt
 
 
+
+
   write_backer.io.rdData := memorizer.io.rdData
   write_backer.io.rdEnaIn := memorizer.io.rdEnaOut
   write_backer.io.rdInput := memorizer.io.rdOutput
   write_backer.io.ALUinput := memorizer.io.ALUoutput
   write_backer.io.wrEnaIn := memorizer.io.wrEnaOut
 
-  x(17) := 15.S
+
+  x(write_backer.io.rdOut) := write_backer.io.ALUoutput
+
+
+  when(x(2) === 0xdeadbeef.S){
+    x(3):= 0xdeadbeef.S
+  }
+
+
+  //  io.testVal_u(0) := write_backer.io.rdOut
+  //  io.testVal_s(0) := write_backer.io.ALUoutput
+
+
   Disp.io.xReg := x(17)
   io.seg := Disp.io.seg
   io.an := Disp.io.an

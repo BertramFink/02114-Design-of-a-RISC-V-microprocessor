@@ -30,7 +30,7 @@ class Decoder extends Module {
   //If mem read bliver brugt  og register
 
 
-val poop1 = io.instruction(19, 15)
+  val poop1 = io.instruction(19, 15)
   val poop2 = io.instruction(24, 20)
 
 
@@ -50,7 +50,7 @@ val poop1 = io.instruction(19, 15)
   pcReg := io.pcIn
   io.pcOut := io.pcIn
 
-//
+  //
 
   instruction :=muxedInstr
   io.opcode := instruction(6, 0)

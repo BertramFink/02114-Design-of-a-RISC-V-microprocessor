@@ -24,11 +24,6 @@ class Memorizer extends Module {
 
     val rdOutput = Output(UInt(5.W))
     val ALUoutput = Output(SInt(32.W))
-
-
-
-
-
   })
 
 
@@ -54,19 +49,23 @@ class Memorizer extends Module {
   val rdAddrReg = RegNext(io.rdAddr, 0.U)
   val wrAddrReg = RegNext(io.wrAddr, 0.U)
   val memOpReg = RegNext(io.memOp, 0.U)
-  val mem = SyncReadMem(1024, UInt(8.W))
+  val mem = Seq.fill(4) { SyncReadMem(1024, UInt(8.W)) }
   io.wrEnaOut := wrEnaReg
   io.rdEnaOut := rdEnaReg
-  val readByte0  = mem.read(io.rdAddr)
-  val readByte1  = mem.read(io.rdAddr + 1.U)
-  val readByte2  = mem.read(io.rdAddr + 2.U)
-  val readByte3  = mem.read(io.rdAddr + 3.U)
-  val writeByte0 = wrDataReg(7,0).asUInt
-  val writeByte1 =wrDataReg(15,8).asUInt
-  val writeByte2 =wrDataReg(23,16).asUInt
-  val writeByte3 =wrDataReg(31,24).asUInt
 
-  io.rdData := mem.read(io.rdAddr).asSInt
+  val readByte0  = mem(0).read(io.rdAddr>>2)
+  val readByte1  = mem(1).read(io.rdAddr>>2)
+  val readByte2  = mem(2).read(io.rdAddr>>2)
+  val readByte3  = mem(3).read(io.rdAddr>>2)
+  val offset =  RegNext(io.rdAddr(1,0), 0.U)
+
+
+  val writeByte3 =wrDataReg(31,24).asUInt
+  val writeByte2 =wrDataReg(23,16).asUInt
+  val writeByte1 =wrDataReg(15,8).asUInt
+  val writeByte0 =wrDataReg(7,0).asUInt
+
+  io.rdData := 0.S
   io.rdLoadRegMemOut := 0.U
   io.aluLoadRegMemOut := 0.S
   switch(memOpReg) {
@@ -76,23 +75,89 @@ class Memorizer extends Module {
     is(1.U) {
       io.rdData := readByte0.asSInt
       when(wrEnaReg) {
-        mem.write(wrAddrReg, writeByte0)
+        io.rdData := 0.S
+        switch(offset) {
+          is(0.U) {
+            mem(0).write(wrAddrReg>>2, writeByte0)
+          }
+          is(1.U) {
+            mem(1).write(wrAddrReg>>2, writeByte0)
+          }
+          is(2.U) {
+            mem(2).write(wrAddrReg>>2, writeByte0)
+          }
+          is(3.U) {
+            mem(3).write(wrAddrReg>>2, writeByte0)
+          }
+        }
       }
     }
     is(2.U) {
       io.rdData := Cat(readByte1,  readByte0).asSInt
       when(wrEnaReg) {
-        mem.write(wrAddrReg, writeByte0)
-        mem.write(wrAddrReg + 1.U, writeByte1)
+        io.rdData := 0.S
+        switch(offset) {
+          is(0.U) {
+            mem(0).write(wrAddrReg>>2, writeByte0)
+            mem(1).write(wrAddrReg>>2, writeByte1)
+          }
+          is(1.U) {
+            mem(1).write(wrAddrReg>>2, writeByte0)
+            mem(2).write(wrAddrReg>>2, writeByte1)
+          }
+          is(2.U) {
+            mem(2).write(wrAddrReg>>2, writeByte0)
+            mem(3).write(wrAddrReg>>2, writeByte1)
+          }
+          is(3.U) {
+            mem(3).write(wrAddrReg>>2, writeByte0)
+
+          }
+        }
       }
     }
     is(3.U) {
-      io.rdData := Cat(readByte3, readByte2, readByte1, readByte0).asSInt
-      when(wrEnaReg) {
-        mem.write(wrAddrReg, writeByte0)
-        mem.write(wrAddrReg + 1.U, writeByte1)
-        mem.write(wrAddrReg+2.U, writeByte2)
-        mem.write(wrAddrReg + 3.U, writeByte3)
+
+      io.rdData := 0.S
+      switch(offset) {
+        is(0.U) {
+          io.rdData := Cat(readByte3, readByte2, readByte1, readByte0).asSInt
+
+          when(wrEnaReg) {
+
+            mem(0).write(wrAddrReg >> 2, writeByte0)
+            mem(1).write(wrAddrReg >> 2, writeByte1)
+            mem(2).write(wrAddrReg >> 2, writeByte2)
+            mem(3).write(wrAddrReg >> 2, writeByte3)
+          }
+        }
+        is(1.U) {
+          io.rdData := Cat(0.U(8.W),readByte3, readByte2, readByte1).asSInt
+          when(wrEnaReg) {
+
+            mem(1).write(wrAddrReg >> 2, writeByte0)
+            mem(2).write(wrAddrReg >> 2, writeByte1)
+            mem(3).write(wrAddrReg >> 2, writeByte2)
+          }
+
+        }
+        is(2.U) {
+          io.rdData := Cat(readByte3, readByte2).asSInt
+
+          when(wrEnaReg) {
+
+            mem(2).write(wrAddrReg >> 2, writeByte0)
+            mem(3).write(wrAddrReg >> 2, writeByte1)
+          }
+        }
+        is(3.U) {
+          io.rdData := readByte3.asSInt
+          when(wrEnaReg) {
+
+            mem(3).write(wrAddrReg >> 2, writeByte0)
+
+          }
+        }
       }
     }
 

@@ -72,14 +72,14 @@ class ALU extends Module {
           io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
         }
         is(0x5.U) {
-         // io.ALUout := 3.S
+          // io.ALUout := 3.S
           io.ALUout := (operand1.asUInt >> operand2.asUInt).asSInt
 
           when(funct7=== 0x20.U) {
-              io.ALUout := operand1 >> operand2.asUInt
+            io.ALUout := operand1 >> operand2.asUInt
             //io.ALUout := 5.S
-            }
           }
+        }
 
         is(0x2.U) {
           io.ALUout := Mux(operand1.asSInt < operand2, 1.S, 0.S)
@@ -157,20 +157,20 @@ class ALU extends Module {
           }
         }
 
-          is(0x6.U) {
-            when(operand1 < operand2) {
-              io.branchEnable := true.B
-              io.branchOut := pcReg + imm - 4.S
-            }
+        is(0x6.U) {
+          when(operand1 < operand2) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm - 4.S
           }
-          is(0x7.U) {
-            when(operand1.asUInt >= operand2.asUInt) {
-              io.branchEnable := true.B
-              io.branchOut := pcReg + imm - 4.S
-            }
+        }
+        is(0x7.U) {
+          when(operand1.asUInt >= operand2.asUInt) {
+            io.branchEnable := true.B
+            io.branchOut := pcReg + imm - 4.S
           }
         }
       }
+    }
 
     is(5.U) { //jal
       io.branchOut := pcReg + imm
@@ -191,9 +191,10 @@ class ALU extends Module {
 
   val cntReg = RegInit(0.U)
 
-  val cntNext = Mux(io.branchEnable && (io.imm >= 12.S), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U)))         // if branch, set to 2, otherwise stay the same
-  val rdReg = RegNext(Mux(cntReg > 0.U, 0.U, Mux(imm > 4.S && io.branchEnable, 0.U, io.rdIn)))
+  val cntNext = Mux(((io.branchEnable && (io.imm >= 12.S))) || ((io.branchEnable && (io.imm === 0.S))), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U)))         // if branch, set to 2, otherwise stay the same
+  val rdReg = RegNext(Mux(cntReg > 0.U, 0.U, Mux((imm > 4.S && io.branchEnable) || (imm === 0.S && io.branchEnable), 0.U, io.rdIn)))
   val cntNext2 = Mux(cntNext > 0.U, cntNext - 1.U, cntNext) // if >0, decrement, else stay the same
+  cntReg := cntNext2
 
   io.rdOut:= rdReg
 
