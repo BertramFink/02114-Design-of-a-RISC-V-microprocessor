@@ -34,9 +34,9 @@ class Food(maxCount: Int) extends Module {
     0x00000013.U(32.W),
   )))
 
-  fetcher.io.input    := instrReg
+  fetcher.io.instrIn    := instrReg
 
-  decoder.io.instruction := fetcher.io.instruction
+  decoder.io.instrIn   := fetcher.io.instrOut
 
   decoder.io.pcIn := fetcher.io.pcOut
   executer.io.pcIn := decoder.io.pcOut

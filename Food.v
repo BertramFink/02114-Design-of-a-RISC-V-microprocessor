@@ -1,49 +1,49 @@
 module Fetcher(
   input         clock,
   input         reset,
-  output [31:0] io_instruction,
   input  [31:0] io_branchIn,
+  input         io_branchEnable,
   input         io_shouldMux,
-  output [31:0] io_pcOut,
-  input         io_branchEnable
+  output [31:0] io_instrOut,
+  output [31:0] io_pcOut
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
 `endif // RANDOMIZE_REG_INIT
-  reg [31:0] pcReg; // @[Fetcher.scala 20:22]
-  reg [31:0] instruction; // @[Fetcher.scala 21:28]
-  wire [31:0] _pcPlusReg_T_2 = $signed(pcReg) + 32'sh4; // @[Fetcher.scala 32:85]
-  wire [31:0] _pcPlusReg_T_3 = io_branchEnable ? $signed(io_branchIn) : $signed(_pcPlusReg_T_2); // @[Fetcher.scala 32:46]
-  wire [31:0] pcPlusReg = io_shouldMux ? $signed(pcReg) : $signed(_pcPlusReg_T_3); // @[Fetcher.scala 32:22]
-  wire [29:0] _instruction_T = pcPlusReg[31:2]; // @[Fetcher.scala 40:32]
-  wire [31:0] _GEN_1 = 4'h1 == _instruction_T[3:0] ? 32'heef08093 : 32'hdeadc0b7; // @[Fetcher.scala 40:{15,15}]
-  wire [31:0] _GEN_2 = 4'h2 == _instruction_T[3:0] ? 32'h102023 : _GEN_1; // @[Fetcher.scala 40:{15,15}]
-  wire [31:0] _GEN_3 = 4'h3 == _instruction_T[3:0] ? 32'h2103 : _GEN_2; // @[Fetcher.scala 40:{15,15}]
-  wire [31:0] _GEN_4 = 4'h4 == _instruction_T[3:0] ? 32'ha55b08b7 : _GEN_3; // @[Fetcher.scala 40:{15,15}]
-  wire [31:0] _GEN_5 = 4'h5 == _instruction_T[3:0] ? 32'hb588893 : _GEN_4; // @[Fetcher.scala 40:{15,15}]
-  assign io_instruction = instruction; // @[Fetcher.scala 42:18]
-  assign io_pcOut = pcReg; // @[Fetcher.scala 44:12]
+  reg [31:0] pcReg; // @[Fetcher.scala 15:22]
+  reg [31:0] instr; // @[Fetcher.scala 16:22]
+  wire [31:0] _pcPlusReg_T_2 = $signed(pcReg) + 32'sh4; // @[Fetcher.scala 24:85]
+  wire [31:0] _pcPlusReg_T_3 = io_branchEnable ? $signed(io_branchIn) : $signed(_pcPlusReg_T_2); // @[Fetcher.scala 24:46]
+  wire [31:0] pcPlusReg = io_shouldMux ? $signed(pcReg) : $signed(_pcPlusReg_T_3); // @[Fetcher.scala 24:22]
+  wire [29:0] _instr_T = pcPlusReg[31:2]; // @[Fetcher.scala 28:28]
+  wire [31:0] _GEN_1 = 4'h1 == _instr_T[3:0] ? 32'heef08093 : 32'hdeadc0b7; // @[Fetcher.scala 28:{9,9}]
+  wire [31:0] _GEN_2 = 4'h2 == _instr_T[3:0] ? 32'h102023 : _GEN_1; // @[Fetcher.scala 28:{9,9}]
+  wire [31:0] _GEN_3 = 4'h3 == _instr_T[3:0] ? 32'h2103 : _GEN_2; // @[Fetcher.scala 28:{9,9}]
+  wire [31:0] _GEN_4 = 4'h4 == _instr_T[3:0] ? 32'ha55b08b7 : _GEN_3; // @[Fetcher.scala 28:{9,9}]
+  wire [31:0] _GEN_5 = 4'h5 == _instr_T[3:0] ? 32'hb588893 : _GEN_4; // @[Fetcher.scala 28:{9,9}]
+  assign io_instrOut = instr; // @[Fetcher.scala 30:15]
+  assign io_pcOut = pcReg; // @[Fetcher.scala 31:12]
   always @(posedge clock) begin
-    if (reset) begin // @[Fetcher.scala 20:22]
-      pcReg <= -32'sh4; // @[Fetcher.scala 20:22]
-    end else if (!(io_shouldMux)) begin // @[Fetcher.scala 32:22]
-      if (io_branchEnable) begin // @[Fetcher.scala 32:46]
+    if (reset) begin // @[Fetcher.scala 15:22]
+      pcReg <= -32'sh4; // @[Fetcher.scala 15:22]
+    end else if (!(io_shouldMux)) begin // @[Fetcher.scala 24:22]
+      if (io_branchEnable) begin // @[Fetcher.scala 24:46]
         pcReg <= io_branchIn;
       end else begin
         pcReg <= _pcPlusReg_T_2;
       end
     end
-    if (reset) begin // @[Fetcher.scala 21:28]
-      instruction <= 32'h0; // @[Fetcher.scala 21:28]
-    end else if (4'h8 == _instruction_T[3:0]) begin // @[Fetcher.scala 40:15]
-      instruction <= 32'h13; // @[Fetcher.scala 40:15]
-    end else if (4'h7 == _instruction_T[3:0]) begin // @[Fetcher.scala 40:15]
-      instruction <= 32'h100093; // @[Fetcher.scala 40:15]
-    end else if (4'h6 == _instruction_T[3:0]) begin // @[Fetcher.scala 40:15]
-      instruction <= 32'h63; // @[Fetcher.scala 40:15]
+    if (reset) begin // @[Fetcher.scala 16:22]
+      instr <= 32'h0; // @[Fetcher.scala 16:22]
+    end else if (4'h8 == _instr_T[3:0]) begin // @[Fetcher.scala 28:9]
+      instr <= 32'h13; // @[Fetcher.scala 28:9]
+    end else if (4'h7 == _instr_T[3:0]) begin // @[Fetcher.scala 28:9]
+      instr <= 32'h100093; // @[Fetcher.scala 28:9]
+    end else if (4'h6 == _instr_T[3:0]) begin // @[Fetcher.scala 28:9]
+      instr <= 32'h63; // @[Fetcher.scala 28:9]
     end else begin
-      instruction <= _GEN_5;
+      instr <= _GEN_5;
     end
   end
 // Register and memory initialization
@@ -85,7 +85,7 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   pcReg = _RAND_0[31:0];
   _RAND_1 = {1{`RANDOM}};
-  instruction = _RAND_1[31:0];
+  instr = _RAND_1[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -97,7 +97,7 @@ endmodule
 module Decoder(
   input         clock,
   input         reset,
-  input  [31:0] io_instruction,
+  input  [31:0] io_instrIn,
   output [6:0]  io_opcode,
   output [4:0]  io_rdOutput,
   output [2:0]  io_funct3,
@@ -116,50 +116,50 @@ module Decoder(
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
-  wire [4:0] poop1 = io_instruction[19:15]; // @[Decoder.scala 33:29]
-  wire [4:0] poop2 = io_instruction[24:20]; // @[Decoder.scala 34:29]
-  reg [31:0] instruction; // @[Decoder.scala 37:28]
-  wire  loadMemEnable = instruction[6:0] == 7'h3; // @[Decoder.scala 38:49]
-  wire [11:0] _io_imm_S_T_1 = {instruction[31:25], 5'h0}; // @[Decoder.scala 64:38]
-  wire [11:0] _GEN_0 = {{7'd0}, instruction[11:7]}; // @[Decoder.scala 64:44]
-  wire [12:0] _io_imm_B_T_1 = {instruction[31], 12'h0}; // @[Decoder.scala 65:34]
-  wire [11:0] _io_imm_B_T_3 = {instruction[7], 11'h0}; // @[Decoder.scala 65:59]
-  wire [12:0] _GEN_1 = {{1'd0}, _io_imm_B_T_3}; // @[Decoder.scala 65:41]
-  wire [12:0] _io_imm_B_T_4 = _io_imm_B_T_1 | _GEN_1; // @[Decoder.scala 65:41]
-  wire [10:0] _io_imm_B_T_6 = {instruction[30:25], 5'h0}; // @[Decoder.scala 65:89]
-  wire [12:0] _GEN_2 = {{2'd0}, _io_imm_B_T_6}; // @[Decoder.scala 65:66]
-  wire [12:0] _io_imm_B_T_7 = _io_imm_B_T_4 | _GEN_2; // @[Decoder.scala 65:66]
-  wire [4:0] _io_imm_B_T_9 = {instruction[11:8], 1'h0}; // @[Decoder.scala 65:117]
-  wire [12:0] _GEN_3 = {{8'd0}, _io_imm_B_T_9}; // @[Decoder.scala 65:95]
-  wire [20:0] _io_imm_J_T_1 = {instruction[31], 20'h0}; // @[Decoder.scala 67:35]
-  wire [19:0] _io_imm_J_T_3 = {instruction[19:12], 12'h0}; // @[Decoder.scala 67:65]
-  wire [20:0] _GEN_4 = {{1'd0}, _io_imm_J_T_3}; // @[Decoder.scala 67:42]
-  wire [20:0] _io_imm_J_T_4 = _io_imm_J_T_1 | _GEN_4; // @[Decoder.scala 67:42]
-  wire [11:0] _io_imm_J_T_6 = {instruction[20], 11'h0}; // @[Decoder.scala 67:91]
-  wire [20:0] _GEN_5 = {{9'd0}, _io_imm_J_T_6}; // @[Decoder.scala 67:72]
-  wire [20:0] _io_imm_J_T_7 = _io_imm_J_T_4 | _GEN_5; // @[Decoder.scala 67:72]
-  wire [10:0] _io_imm_J_T_9 = {instruction[30:21], 1'h0}; // @[Decoder.scala 67:121]
-  wire [20:0] _GEN_6 = {{10'd0}, _io_imm_J_T_9}; // @[Decoder.scala 67:98]
-  assign io_opcode = instruction[6:0]; // @[Decoder.scala 56:27]
-  assign io_rdOutput = instruction[11:7]; // @[Decoder.scala 57:33]
-  assign io_funct3 = instruction[14:12]; // @[Decoder.scala 58:27]
-  assign io_funct7 = instruction[31:25]; // @[Decoder.scala 62:27]
-  assign io_rs1 = instruction[19:15]; // @[Decoder.scala 59:27]
-  assign io_rs2 = instruction[24:20]; // @[Decoder.scala 61:27]
-  assign io_imm_I = instruction[31:20]; // @[Decoder.scala 63:36]
-  assign io_imm_S = _io_imm_S_T_1 | _GEN_0; // @[Decoder.scala 64:66]
-  assign io_imm_B = _io_imm_B_T_7 | _GEN_3; // @[Decoder.scala 65:124]
-  assign io_imm_U = {{12'd0}, instruction[31:12]}; // @[Decoder.scala 66:13]
-  assign io_imm_J = _io_imm_J_T_7 | _GEN_6; // @[Decoder.scala 67:129]
-  assign io_pcOut = io_pcIn; // @[Decoder.scala 51:12]
-  assign io_shouldMux = loadMemEnable & (poop1 == io_rdOutput | poop2 == io_rdOutput); // @[Decoder.scala 41:33]
+  wire [4:0] rs1Reg = io_instrIn[19:15]; // @[Decoder.scala 27:26]
+  wire [4:0] rs2Reg = io_instrIn[24:20]; // @[Decoder.scala 28:26]
+  reg [31:0] instr; // @[Decoder.scala 31:22]
+  wire  loadMemEnable = instr[6:0] == 7'h3; // @[Decoder.scala 32:43]
+  wire [11:0] _io_imm_S_T_1 = {instr[31:25], 5'h0}; // @[Decoder.scala 53:32]
+  wire [11:0] _GEN_0 = {{7'd0}, instr[11:7]}; // @[Decoder.scala 53:38]
+  wire [12:0] _io_imm_B_T_1 = {instr[31], 12'h0}; // @[Decoder.scala 54:28]
+  wire [11:0] _io_imm_B_T_3 = {instr[7], 11'h0}; // @[Decoder.scala 54:47]
+  wire [12:0] _GEN_1 = {{1'd0}, _io_imm_B_T_3}; // @[Decoder.scala 54:35]
+  wire [12:0] _io_imm_B_T_4 = _io_imm_B_T_1 | _GEN_1; // @[Decoder.scala 54:35]
+  wire [10:0] _io_imm_B_T_6 = {instr[30:25], 5'h0}; // @[Decoder.scala 54:71]
+  wire [12:0] _GEN_2 = {{2'd0}, _io_imm_B_T_6}; // @[Decoder.scala 54:54]
+  wire [12:0] _io_imm_B_T_7 = _io_imm_B_T_4 | _GEN_2; // @[Decoder.scala 54:54]
+  wire [4:0] _io_imm_B_T_9 = {instr[11:8], 1'h0}; // @[Decoder.scala 54:93]
+  wire [12:0] _GEN_3 = {{8'd0}, _io_imm_B_T_9}; // @[Decoder.scala 54:77]
+  wire [20:0] _io_imm_J_T_1 = {instr[31], 20'h0}; // @[Decoder.scala 56:29]
+  wire [19:0] _io_imm_J_T_3 = {instr[19:12], 12'h0}; // @[Decoder.scala 56:53]
+  wire [20:0] _GEN_4 = {{1'd0}, _io_imm_J_T_3}; // @[Decoder.scala 56:36]
+  wire [20:0] _io_imm_J_T_4 = _io_imm_J_T_1 | _GEN_4; // @[Decoder.scala 56:36]
+  wire [11:0] _io_imm_J_T_6 = {instr[20], 11'h0}; // @[Decoder.scala 56:73]
+  wire [20:0] _GEN_5 = {{9'd0}, _io_imm_J_T_6}; // @[Decoder.scala 56:60]
+  wire [20:0] _io_imm_J_T_7 = _io_imm_J_T_4 | _GEN_5; // @[Decoder.scala 56:60]
+  wire [10:0] _io_imm_J_T_9 = {instr[30:21], 1'h0}; // @[Decoder.scala 56:97]
+  wire [20:0] _GEN_6 = {{10'd0}, _io_imm_J_T_9}; // @[Decoder.scala 56:80]
+  assign io_opcode = instr[6:0]; // @[Decoder.scala 45:21]
+  assign io_rdOutput = instr[11:7]; // @[Decoder.scala 46:26]
+  assign io_funct3 = instr[14:12]; // @[Decoder.scala 47:21]
+  assign io_funct7 = instr[31:25]; // @[Decoder.scala 51:21]
+  assign io_rs1 = instr[19:15]; // @[Decoder.scala 48:21]
+  assign io_rs2 = instr[24:20]; // @[Decoder.scala 50:21]
+  assign io_imm_I = instr[31:20]; // @[Decoder.scala 52:30]
+  assign io_imm_S = _io_imm_S_T_1 | _GEN_0; // @[Decoder.scala 53:54]
+  assign io_imm_B = _io_imm_B_T_7 | _GEN_3; // @[Decoder.scala 54:100]
+  assign io_imm_U = {{12'd0}, instr[31:12]}; // @[Decoder.scala 55:13]
+  assign io_imm_J = _io_imm_J_T_7 | _GEN_6; // @[Decoder.scala 56:105]
+  assign io_pcOut = io_pcIn; // @[Decoder.scala 39:12]
+  assign io_shouldMux = loadMemEnable & (rs1Reg == io_rdOutput | rs2Reg == io_rdOutput); // @[Decoder.scala 35:33]
   always @(posedge clock) begin
-    if (reset) begin // @[Decoder.scala 37:28]
-      instruction <= 32'h0; // @[Decoder.scala 37:28]
-    end else if (io_shouldMux) begin // @[Decoder.scala 44:23]
-      instruction <= 32'h13;
+    if (reset) begin // @[Decoder.scala 31:22]
+      instr <= 32'h0; // @[Decoder.scala 31:22]
+    end else if (io_shouldMux) begin // @[Decoder.scala 41:21]
+      instr <= 32'h13;
     end else begin
-      instruction <= io_instruction;
+      instr <= io_instrIn;
     end
   end
 // Register and memory initialization
@@ -199,7 +199,7 @@ initial begin
     `endif
 `ifdef RANDOMIZE_REG_INIT
   _RAND_0 = {1{`RANDOM}};
-  instruction = _RAND_0[31:0];
+  instr = _RAND_0[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -1606,14 +1606,14 @@ module Food(
 `endif // RANDOMIZE_REG_INIT
   wire  fetcher_clock; // @[Food.scala 18:29]
   wire  fetcher_reset; // @[Food.scala 18:29]
-  wire [31:0] fetcher_io_instruction; // @[Food.scala 18:29]
   wire [31:0] fetcher_io_branchIn; // @[Food.scala 18:29]
-  wire  fetcher_io_shouldMux; // @[Food.scala 18:29]
-  wire [31:0] fetcher_io_pcOut; // @[Food.scala 18:29]
   wire  fetcher_io_branchEnable; // @[Food.scala 18:29]
+  wire  fetcher_io_shouldMux; // @[Food.scala 18:29]
+  wire [31:0] fetcher_io_instrOut; // @[Food.scala 18:29]
+  wire [31:0] fetcher_io_pcOut; // @[Food.scala 18:29]
   wire  decoder_clock; // @[Food.scala 19:29]
   wire  decoder_reset; // @[Food.scala 19:29]
-  wire [31:0] decoder_io_instruction; // @[Food.scala 19:29]
+  wire [31:0] decoder_io_instrIn; // @[Food.scala 19:29]
   wire [6:0] decoder_io_opcode; // @[Food.scala 19:29]
   wire [4:0] decoder_io_rdOutput; // @[Food.scala 19:29]
   wire [2:0] decoder_io_funct3; // @[Food.scala 19:29]
@@ -1776,16 +1776,16 @@ module Food(
   Fetcher fetcher ( // @[Food.scala 18:29]
     .clock(fetcher_clock),
     .reset(fetcher_reset),
-    .io_instruction(fetcher_io_instruction),
     .io_branchIn(fetcher_io_branchIn),
+    .io_branchEnable(fetcher_io_branchEnable),
     .io_shouldMux(fetcher_io_shouldMux),
-    .io_pcOut(fetcher_io_pcOut),
-    .io_branchEnable(fetcher_io_branchEnable)
+    .io_instrOut(fetcher_io_instrOut),
+    .io_pcOut(fetcher_io_pcOut)
   );
   Decoder decoder ( // @[Food.scala 19:29]
     .clock(decoder_clock),
     .reset(decoder_reset),
-    .io_instruction(decoder_io_instruction),
+    .io_instrIn(decoder_io_instrIn),
     .io_opcode(decoder_io_opcode),
     .io_rdOutput(decoder_io_rdOutput),
     .io_funct3(decoder_io_funct3),
@@ -1928,11 +1928,11 @@ module Food(
   assign fetcher_clock = clock;
   assign fetcher_reset = reset;
   assign fetcher_io_branchIn = ALU_io_branchOut; // @[Food.scala 46:23]
-  assign fetcher_io_shouldMux = decoder_io_shouldMux; // @[Food.scala 54:24]
   assign fetcher_io_branchEnable = ALU_io_branchEnable; // @[Food.scala 47:27]
+  assign fetcher_io_shouldMux = decoder_io_shouldMux; // @[Food.scala 54:24]
   assign decoder_clock = clock;
   assign decoder_reset = reset;
-  assign decoder_io_instruction = fetcher_io_instruction; // @[Food.scala 39:26]
+  assign decoder_io_instrIn = fetcher_io_instrOut; // @[Food.scala 39:24]
   assign decoder_io_pcIn = fetcher_io_pcOut; // @[Food.scala 41:19]
   assign executer_clock = clock;
   assign executer_reset = reset;
