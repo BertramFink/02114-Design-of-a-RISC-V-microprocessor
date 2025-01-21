@@ -7,10 +7,7 @@ object Food extends App {
 
 class Food extends Module {
   val io = IO(new Bundle {
-    val led1 = Output(UInt(1.W)) // Allow external input for instructions
-    val led2 = Output(UInt(1.W)) // Allow external input for instructions
-    val led3 = Output(UInt(1.W)) // Allow external input for instructions
-
+    val led = Output(Vec(16, UInt(1.W)))
   })
 
 
@@ -115,10 +112,13 @@ class Food extends Module {
 when(x(2) === 0xdeadbeef.S){
   x(3):= 0xdeadbeef.S
 }
+  for (i<- 0 to 15 ){
+    io.led(i) := 0.U
+  }
+  io.led(0) := x(2) > 0.S
+  io.led(1) := x(2) === 0.S
+  io.led(2) := x(2) < 0.S
 
-  io.led1 := x(1) === 0xdeadbeef.S
-  io.led2 := x(2) === 0xdeadbeef.S
-  io.led3 := x(3) === 0xdeadbeef.S
   //  io.testVal_u(0) := write_backer.io.rdOut
   //  io.testVal_s(0) := write_backer.io.ALUoutput
 }
