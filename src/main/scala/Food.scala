@@ -7,9 +7,9 @@ object Food extends App {
 
 class Food extends Module {
   val io = IO(new Bundle {
-    val testVal_s = Output(Vec(9, SInt(32.W))) // Allow external input for instructions
-    val testVal_u = Output(Vec(9, SInt(32.W)))
-    val testVal_U2 = Output(UInt(32.W))
+    val led1 = Output(UInt(1.W)) // Allow external input for instructions
+    val led2 = Output(UInt(1.W)) // Allow external input for instructions
+    val led3 = Output(UInt(1.W)) // Allow external input for instructions
 
   })
 
@@ -25,8 +25,8 @@ class Food extends Module {
   val instrReg      = RegInit(VecInit(Seq(
     0xdeadc0b7L.U(32.W),
     0xeef08093L.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
+    0x00102023.U(32.W),
+    0x00002103.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
@@ -110,24 +110,9 @@ class Food extends Module {
 
 
 
-
-  for (i <- 0 to 8 ) {
-    io.testVal_u(i) := 0.S
-    io.testVal_s(i) := 0.S
-  }
-
-  for (i<- 1 to 8 ){
-    io.testVal_s(i) := x(i-1)
-  }
-  io.testVal_u(0) := fetcher.io.pcOut
-  io.testVal_u(2) := executer.io.pcOut
-  io.testVal_u(3) := decoder.io.pcOut
-  io.testVal_u(4) := ALU.io.branchOut
-  io.testVal_u(6) := fetcher.io.index
-
-  io.testVal_U2 := fetcher.io.instruction
-
-
+  io.led1 := x(1) === 0xdeadbeef.S
+  io.led2 := x(2) === 0xdeadbeef.S
+  io.led3 := 1.U
   //  io.testVal_u(0) := write_backer.io.rdOut
   //  io.testVal_s(0) := write_backer.io.ALUoutput
 }

@@ -13,13 +13,8 @@ class FoodSpec extends AnyFlatSpec with ChiselScalatestTester {
         println(s"Cycle $cycle")
 
         dut.clock.step(1)
-        println(s"pcOutFe: ${dut.io.testVal_u(0).peekInt()}, pcOutDe: ${dut.io.testVal_u(3).peekInt()}, pcOutEx: ${dut.io.testVal_u(2).peekInt()}, imm_B: ${dut.io.testVal_u(1).peekInt()}, branchOutEx: ${dut.io.testVal_u(4).peekInt()}, branchInFe: ${dut.io.testVal_u(5).peekInt()}")
-        println(s"ALUOutEx: ${dut.io.testVal_U2.peek()}, indexFe: ${dut.io.testVal_u(6).peekInt()}")
-
-        for (i <- 1 to 8){
-          print("x(" + (i-1) + "):" + s"${dut.io.testVal_s(i).peekInt()}. ")
-
-        }
+        println(s"pcOutFe: ${dut.io.led1.peekInt()}")
+        println(s"pcOutFe: ${dut.io.led2.peekInt()}")
         println()
 
         println()

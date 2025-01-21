@@ -37,7 +37,7 @@ class Fetcher() extends Module {
   val index = ((pcPlusReg) >> 2)
 
 
-  instruction := io.input(index(29,0)).asUInt
+  instruction :=Mux(index >8.S, 0x00000013.U, io.input(index(29,0)).asUInt)
 
   io.instruction := instruction
   io.index := index
