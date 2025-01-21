@@ -69,13 +69,14 @@ class ALU extends Module {
         }
         is(0x1.U) {
 
-          io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt  //may not work, error if using more than (18,0)
+          io.ALUout := (operand1.asUInt << operand2.asUInt(18,0)).asSInt 
         }
         is(0x5.U) {
           io.ALUout := (operand1.asUInt >> operand2.asUInt).asSInt
 
           when(funct7=== 0x20.U) {
               io.ALUout := operand1 >> operand2.asUInt
+            
             }
           }
 

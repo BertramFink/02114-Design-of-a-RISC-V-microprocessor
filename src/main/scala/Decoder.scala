@@ -3,7 +3,7 @@ import chisel3.util._
 
 class Decoder extends Module {
   val io = IO(new Bundle {
-    val instruction = Input(UInt(32.W))
+    val instrIn = Input(UInt(32.W))
     val opcode      = Output(UInt(7.W))
     val rdOutput          = Output(UInt(5.W))
     val funct3      = Output(UInt(3.W))
@@ -22,47 +22,36 @@ class Decoder extends Module {
     val pcIn = Input(SInt(32.W))
     val pcOut = Output(SInt(32.W))
     val shouldMux = Output(Bool())
-
-
   })
 
-  //val imm_s = instruction(31, 25) << 5 | instruction(11, 7)
-  //If mem read bliver brugt  og register
-
-
-  val poop1 = io.instruction(19, 15)
-  val poop2 = io.instruction(24, 20)
-
-
-  val instruction = RegInit(0.U(32.W))
-  val loadMemEnable = (instruction(6, 0).asUInt === 3.U)
-
-
-  io.shouldMux := loadMemEnable && ((poop1 === io.rdOutput) || (poop2 === io.rdOutput))
-  val boolean = RegInit(false.B)
-  boolean := io.shouldMux
-  val muxedInstr = Mux(io.shouldMux, 0x00000013.U, io.instruction)
-
-
-
+  val rs1Reg = io.instrIn(19, 15)
+  val rs2Reg = io.instrIn(24, 20)
   val pcReg = RegInit(0.S(32.W))
+
+  val instr = RegInit(0.U(32.W))
+  val loadMemEnable = (instr(6, 0).asUInt === 3.U)
+  val boolean = RegInit(false.B)
+
+  io.shouldMux := loadMemEnable && ((rs1Reg === io.rdOutput) || (rs2Reg === io.rdOutput))
+  boolean := io.shouldMux
 
   pcReg := io.pcIn
   io.pcOut := io.pcIn
 
-//
+  val muxInstr = Mux(io.shouldMux, 0x00000013.U, io.instrIn)
+  //
 
-  instruction :=muxedInstr
-  io.opcode := instruction(6, 0)
-  io.rdOutput     := instruction(11, 7)
-  io.funct3 := instruction(14, 12)
-  io.rs1    := instruction(19, 15)
+  instr := muxInstr
+  io.opcode := instr(6, 0)
+  io.rdOutput     := instr(11, 7)
+  io.funct3 := instr(14, 12)
+  io.rs1    := instr(19, 15)
 
-  io.rs2    := instruction(24, 20)
-  io.funct7 := instruction(31, 25)
-  io.imm_I  := instruction(31, 20).asSInt
-  io.imm_S  := ((instruction(31, 25) << 5) | instruction(11, 7)).asSInt
-  io.imm_B  := ((instruction(31) << 12) | (instruction(7) << 11) | (instruction(30, 25) << 5) | (instruction(11, 8) << 1)).asSInt
-  io.imm_U  := instruction(31, 12)
-  io.imm_J  := (((instruction(31) << 20) | (instruction(19, 12) << 12) | (instruction(20) << 11) | (instruction(30, 21) << 1))).asSInt
+  io.rs2    := instr(24, 20)
+  io.funct7 := instr(31, 25)
+  io.imm_I  := instr(31, 20).asSInt
+  io.imm_S  := ((instr(31, 25) << 5) | instr(11, 7)).asSInt
+  io.imm_B  := ((instr(31) << 12) | (instr(7) << 11) | (instr(30, 25) << 5) | (instr(11, 8) << 1)).asSInt
+  io.imm_U  := instr(31, 12)
+  io.imm_J  := (((instr(31) << 20) | (instr(19, 12) << 12) | (instr(20) << 11) | (instr(30, 21) << 1))).asSInt
 }

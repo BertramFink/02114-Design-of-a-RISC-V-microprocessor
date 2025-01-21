@@ -2,12 +2,14 @@ import chisel3._
 import chisel3.util._
 
 object Food extends App {
-  emitVerilog(new Food(), Array("--target-dir", "generated"))
+  emitVerilog(new Food(100000))
 }
 
-class Food extends Module {
+class Food(maxCount: Int) extends Module {
   val io = IO(new Bundle {
-    val led = Output(Vec(16, UInt(1.W)))
+    val seg = Output(UInt(7.W))
+    val an = Output(UInt(8.W))
+
   })
 
 
@@ -19,21 +21,22 @@ class Food extends Module {
   val ALU           = Module(new ALU)
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
+  val Disp          = Module(new DisplayMux(maxCount))
   val instrReg      = RegInit(VecInit(Seq(
     0xdeadc0b7L.U(32.W),
     0xeef08093L.U(32.W),
-    0x00102223.U(32.W),
-    0x00402103.U(32.W),
+    0x00102023.U(32.W),
+    0x00002103.U(32.W),
+    0xa55b08b7L.U(32.W),
+    0x0b588893L.U(32.W),
     0x00000063.U(32.W),
     0x00100093.U(32.W),
     0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
   )))
 
-  fetcher.io.input    := instrReg
+  fetcher.io.instrIn    := instrReg
 
-  decoder.io.instruction := fetcher.io.instruction
+  decoder.io.instrIn   := fetcher.io.instrOut
 
   decoder.io.pcIn := fetcher.io.pcOut
   executer.io.pcIn := decoder.io.pcOut
@@ -109,18 +112,23 @@ class Food extends Module {
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
-when(x(2) === 0xdeadbeef.S){
-  x(3):= 0xdeadbeef.S
-}
-  for (i<- 0 to 15 ){
-    io.led(i) := 0.U
+  when(x(2) === 0xdeadbeef.S){
+    x(3):= 0xdeadbeef.S
   }
-  io.led(0) := x(2) > 0.S
-  io.led(1) := x(2) === 0.S
-  io.led(2) := x(2) < 0.S
-  io.led(3) := x(1)  === x(2)
-  io.led(4) := x(0) === 0.S
-  io.led(15) := 1.U
+
+
+  //  io.testVal_u(0) := write_backer.io.rdOut
+  //  io.testVal_s(0) := write_backer.io.ALUoutput
+
+
+  Disp.io.xReg := x(17)
+  io.seg := Disp.io.seg
+  io.an := Disp.io.an
+
+
+  x(write_backer.io.rdOut) := write_backer.io.ALUoutput
+
+
 
 
 

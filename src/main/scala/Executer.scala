@@ -76,7 +76,7 @@ class Executer extends Module {
 
 
   pcReg := io.pcIn
- branchEnableReg := false.B
+  branchEnableReg := false.B
   val lastMemBool1 = io.rdLastRegMemIn === rs1Reg && (rs1Reg =/= 0.U)
   val lastMemBool2 = io.rdLastRegMemIn === rs2Reg && (rs2Reg =/= 0.U)
   val loadMemBool1 = io.loadEnable && io.rdLoadRegMemIn === rs1Reg
