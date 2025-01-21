@@ -194,7 +194,6 @@ class ALU extends Module {
   val cntNext = Mux(io.branchEnable && (io.imm >= 12.S), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U)))         // if branch, set to 2, otherwise stay the same
   val rdReg = RegNext(Mux(cntReg > 0.U, 0.U, Mux(imm > 4.S && io.branchEnable, 0.U, io.rdIn)))
   val cntNext2 = Mux(cntNext > 0.U, cntNext - 1.U, cntNext) // if >0, decrement, else stay the same
-  cntReg := cntNext2
 
   io.rdOut:= rdReg
 

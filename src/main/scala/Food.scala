@@ -2,18 +2,14 @@ import chisel3._
 import chisel3.util._
 
 object Food extends App {
-  emitVerilog(new Food(), Array("--target-dir", "generated"))
+  (new chisel3.stage.ChiselStage).emitVerilog(new Food(100000))
 }
 
-class Food extends Module {
+class Food(maxCount: Int) extends Module {
   val io = IO(new Bundle {
-    val testVal_s = Output(Vec(9, SInt(32.W))) // Allow external input for instructions
-    val testVal_u = Output(Vec(9, SInt(32.W)))
-    val testVal_U2 = Output(UInt(32.W))
-
+    val seg = Output(UInt(7.W))
+    val an = Output(UInt(8.W))
   })
-
-
 
   val x = RegInit(VecInit(Seq.fill(32)(0.S(32.W))))
   val fetcher       = Module(new Fetcher)
@@ -22,6 +18,7 @@ class Food extends Module {
   val ALU           = Module(new ALU)
   val memorizer     = Module(new Memorizer)
   val write_backer  = Module(new Write_backer)
+  val Disp = Module(new DisplayMux(maxCount))
   val instrReg      = RegInit(VecInit(Seq(
 
     0x00200113.U(32.W),
@@ -40,6 +37,8 @@ class Food extends Module {
   )))
 
   fetcher.io.input    := instrReg
+  fetcher.io.branchIn := ALU.io.branchOut
+  fetcher.io.branchEnable := ALU.io.branchEnable
 
   decoder.io.instruction := fetcher.io.instruction
 
@@ -47,9 +46,6 @@ class Food extends Module {
   executer.io.pcIn := decoder.io.pcOut
 
   executer.io.rdIn := ALU.io.rdOut
-
-  fetcher.io.branchIn := ALU.io.branchOut
-  fetcher.io.branchEnable := ALU.io.branchEnable
 
 
   decoder.io.rdRegEx := ALU.io.rdOut
@@ -105,35 +101,22 @@ class Food extends Module {
   memorizer.io.wrData := ALU.io.ALUout.asUInt
 
 
-
-
   write_backer.io.rdData := memorizer.io.rdData
   write_backer.io.rdEnaIn := memorizer.io.rdEnaOut
   write_backer.io.rdInput := memorizer.io.rdOutput
   write_backer.io.ALUinput := memorizer.io.ALUoutput
   write_backer.io.wrEnaIn := memorizer.io.wrEnaOut
 
+  x(17) := 15.S
+  Disp.io.xReg := x(17)
+  Disp.io.seg := io.seg
+  Disp.io.an := io.an
 
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
 
 
-  for (i <- 0 to 8 ) {
-    io.testVal_u(i) := 0.S
-    io.testVal_s(i) := 0.S
-  }
-
-  for (i<- 1 to 8 ){
-    io.testVal_s(i) := x(i-1)
-  }
-  io.testVal_u(0) := fetcher.io.pcOut
-  io.testVal_u(2) := executer.io.pcOut
-  io.testVal_u(3) := decoder.io.pcOut
-  io.testVal_u(4) := ALU.io.branchOut
-  io.testVal_u(6) := fetcher.io.index
-
-  io.testVal_U2 := fetcher.io.instruction
 
 
   //  io.testVal_u(0) := write_backer.io.rdOut

@@ -1,41 +1,33 @@
 import chisel3._
 import chisel3.util._
 
-
-
-class MyModule extends Module {
+class SevSeg extends Module {
   val io = IO(new Bundle {
-    val led = Output(Bool())
-    val xVal = Output(SInt(32.W))
-    val sel = Input(Bool())
+    val in = Input(UInt(4.W))
+    val out = Output(UInt(7.W))
   })
 
-  val xVal = RegInit(0.S(32.W))
+  val sevSeg = WireDefault(0.U)
 
-  xVal := 4.S
-  val CNT_MAX = (100000000 / 2 - 1).U
+  // *** add your table from Lab 5 here or use the version from Lab 6.
 
-
-  val PC = RegInit(0.U(32.W))
-
-
-  val cntReg = RegInit(0.U(32.W))
-  val blkReg = RegInit(false.B)
-
-  cntReg := cntReg + 1.U
-  when(cntReg === CNT_MAX && io.sel) {
-    cntReg := 0.U
-    blkReg := ~blkReg
+  switch (io.in){
+    is(0.U) {sevSeg := "b0111111".U}
+    is(1.U) {sevSeg := "b0000110".U}
+    is(2.U) {sevSeg := "b1011011".U}
+    is(3.U) {sevSeg := "b1001111".U}
+    is(4.U) {sevSeg := "b1100110".U}
+    is(5.U) {sevSeg := "b1101101".U}
+    is(6.U) {sevSeg := "b1111101".U}
+    is(7.U) {sevSeg := "b0000111".U}
+    is(8.U) {sevSeg := "b1111111".U}
+    is(9.U) {sevSeg := "b1100111".U}
+    is(10.U) {sevSeg := "b1110111".U}
+    is(11.U) {sevSeg := "b1111100".U}
+    is(12.U) {sevSeg := "b0111001".U}
+    is(13.U) {sevSeg := "b1011110".U}
+    is(14.U) {sevSeg := "b1111001".U}
+    is(15.U) {sevSeg := "b1110001".U}
   }
-  io.xVal := xVal
-  io.led := blkReg
+  io.out := sevSeg
 }
-
-/**
- * An object extending App to generate the Verilog code.
- */
-
-// error: The s-interpolator prints the Scala .toString of Data objects rather than the value of the hardware wire during simulation. Use the cf-interpolator instead. If you want an elaboration time print, use println.
-//   printf(s"in = $in\n")
-//   ^^^^^^^^^^^^^^^^^^^^^
-
