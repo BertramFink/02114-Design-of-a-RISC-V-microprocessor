@@ -22,8 +22,8 @@ class Food extends Module {
   val instrReg      = RegInit(VecInit(Seq(
     0xdeadc0b7L.U(32.W),
     0xeef08093L.U(32.W),
-    0x00102023.U(32.W),
-    0x00002103.U(32.W),
+    0x00102223.U(32.W),
+    0x00402103.U(32.W),
     0x00000063.U(32.W),
     0x00100093.U(32.W),
     0x00000013.U(32.W),
@@ -118,6 +118,12 @@ when(x(2) === 0xdeadbeef.S){
   io.led(0) := x(2) > 0.S
   io.led(1) := x(2) === 0.S
   io.led(2) := x(2) < 0.S
+  io.led(3) := x(1)  === x(2)
+  io.led(4) := x(0) === 0.S
+  io.led(15) := 1.U
+
+
+
 
   //  io.testVal_u(0) := write_backer.io.rdOut
   //  io.testVal_s(0) := write_backer.io.ALUoutput
