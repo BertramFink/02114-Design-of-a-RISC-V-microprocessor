@@ -142,7 +142,6 @@ class Executer extends Module {
     }
   }
 
-  val rdReg = io.rdIn
   rdLastRegEx := rdReg
   aluLastRegEx := io.ALUIn
 

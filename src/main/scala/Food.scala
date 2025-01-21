@@ -109,8 +109,9 @@ class Food(maxCount: Int) extends Module {
 
   x(17) := 15.S
   Disp.io.xReg := x(17)
-  Disp.io.seg := io.seg
-  Disp.io.an := io.an
+  io.seg := Disp.io.seg
+  io.an := Disp.io.an
+
 
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
