@@ -27,8 +27,8 @@ class Food extends Module {
     0xeef08093L.U(32.W),
     0x00102023.U(32.W),
     0x00002103.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
+    0x00000063.U(32.W),
+    0x00100093.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
@@ -112,11 +112,13 @@ class Food extends Module {
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
-
+when(x(2) === 0xdeadbeef.S){
+  x(3):= 0xdeadbeef.S
+}
 
   io.led1 := x(1) === 0xdeadbeef.S
   io.led2 := x(2) === 0xdeadbeef.S
-  io.led3 := 1.U
+  io.led3 := x(3) === 0xdeadbeef.S
   //  io.testVal_u(0) := write_backer.io.rdOut
   //  io.testVal_s(0) := write_backer.io.ALUoutput
 }

@@ -23,11 +23,12 @@ class FoodTest extends Module {
     0xeef08093L.U(32.W),
     0x00102023.U(32.W),
     0x00002103.U(32.W),
+    0x00000063.U(32.W),
+    0x00100093.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
     0x00000013.U(32.W),
-    0x00000013.U(32.W),
-    0x00000013.U(32.W),
+
   )))
 
   fetcher.io.input    := instrReg
