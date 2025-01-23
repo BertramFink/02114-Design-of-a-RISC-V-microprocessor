@@ -52,6 +52,7 @@ class Food(maxCount: Int) extends Module {
   )))
 
   fetcher.io.instrIn := instrReg
+  //fetcher.io.instrIn(0) := 0xdeadc0b7L.U(32.W)
 
   decoder.io.instrIn := fetcher.io.instrOut
 
