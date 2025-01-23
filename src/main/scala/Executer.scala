@@ -74,8 +74,6 @@ class Executer extends Module {
   io.funct3out := funct3Reg
 
 
-
-
   branchEnableReg := false.B
   val lastMemBool1 = io.rdLastRegMemIn === rs1Reg && (rs1Reg =/= 0.U)
   val lastMemBool2 = io.rdLastRegMemIn === rs2Reg && (rs2Reg =/= 0.U)
@@ -84,8 +82,8 @@ class Executer extends Module {
   val lastExBool1 = (rdLastRegEx === rs1Reg) && (rs1Reg =/= 0.U)
   val lastExBool2 = (rdLastRegEx === rs2Reg) && (rs2Reg =/= 0.U)
 
-  val rs1Wire = Mux(lastExBool1, aluLastRegEx, Mux(lastMemBool1, Mux(loadMemBool1, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs1Reg)))
-  val rs2Wire = Mux(lastExBool2, aluLastRegEx, Mux(lastMemBool2, Mux(loadMemBool2, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs2Reg)))
+  val rs1Wire = Mux(lastExBool1, aluLastRegEx, Mux(lastMemBool1, Mux(loadMemBool1, io.aluLoadRegMemIn, io.aluLastRegMemIn), io.x(rs1Reg)))
+  val rs2Wire = Mux(lastExBool2, aluLastRegEx, Mux(lastMemBool2, Mux(loadMemBool2, io.aluLoadRegMemIn, io.aluLastRegMemIn), io.x(rs2Reg)))
   pcReg := io.pcIn
 
 
@@ -96,7 +94,7 @@ class Executer extends Module {
   io.operand2 := 0.S
   io.group := 0.U
   switch(opcodeReg) { // groups the opcodes like they are in the risc-v card
-    is("b0110011".U){
+    is("b0110011".U) {
       io.operand2 := rs2Wire
       io.group := 1.U
     }
@@ -115,44 +113,41 @@ class Executer extends Module {
         }
       }
     }
-    is("b0000011".U){
+    is("b0000011".U) {
       io.group := 2.U
       io.operand2 := rs2Wire
       io.imm := imm_IReg
     }
-    is("b0100011".U){
+    is("b0100011".U) {
       io.group := 3.U
       io.operand2 := rs2Wire
       io.imm := imm_SReg
     }
-    is("b1100011".U){
+    is("b1100011".U) {
       io.group := 4.U
       io.operand2 := rs2Wire
       io.imm := imm_BReg
     }
-    is("b1101111".U){
+    is("b1101111".U) {
       io.group := 5.U
       io.imm := imm_JReg
     }
-    is("b1100111".U){
+    is("b1100111".U) {
       io.group := 6.U
       io.imm := imm_IReg
     }
-    is("b0110111".U){
+    is("b0110111".U) {
       io.group := 7.U
       io.imm := imm_UReg.asSInt
     }
-    is("b0010111".U){
+    is("b0010111".U) {
       io.group := 8.U
       io.imm := imm_UReg.asSInt
     }
   }
 
-
   rdLastRegEx := io.rdIn
   aluLastRegEx := io.ALUIn
-
-
   io.pcOut := pcReg
 
 }

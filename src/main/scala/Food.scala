@@ -18,7 +18,6 @@ class Food(maxCount: Int) extends Module {
     val switchin5 = Input(UInt(1.W))
 
 
-
   })
 
 

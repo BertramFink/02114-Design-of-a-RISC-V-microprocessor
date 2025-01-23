@@ -28,7 +28,7 @@ class Write_backer extends Module {
   io.ALUoutput := Mux(rdEnaInReg, rdDataReg, ALUreg)
   io.rdOut := rdReg
 
-  when(wrEnaInReg || rdReg === 0.U || rdReg === 32.U) {
+  when(wrEnaInReg || rdReg === 0.U) {
     io.ALUoutput := 0.S
     io.rdOut := 0.U
   }
