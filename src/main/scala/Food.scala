@@ -3,7 +3,9 @@ import chisel3.util._
 
 object Food extends App {
   emitVerilog(new Food(100000))
+  Array("--target-dir", "generated")
 }
+
 
 class Food(maxCount: Int) extends Module {
   val io = IO(new Bundle {
@@ -12,6 +14,9 @@ class Food(maxCount: Int) extends Module {
     val switchin = Input(UInt(1.W))
     val switchin2 = Input(UInt(1.W))
     val switchin3 = Input(UInt(1.W))
+    val switchin4 = Input(UInt(1.W))
+    val switchin5 = Input(UInt(1.W))
+
 
   })
 
@@ -25,19 +30,29 @@ class Food(maxCount: Int) extends Module {
   val write_backer = Module(new Write_backer)
   val Disp = Module(new DisplayMux(maxCount))
   val instrReg = RegInit(VecInit(Seq(
-    0x00000063.U(32.W),
-    0xcafec1b7L.U(32.W),
-    0xabe18193L.U(32.W),
-    0x00c000efL.U(32.W),
-    0x0000006fL.U(32.W),
-    0x00500393L.U(32.W),
-    0xdeadc137L.U(32.W),
-    0xeef10113L.U(32.W),
-    0x00008067L.U(32.W),
+    0xdeadc0b7L.U(32.W),
+    0xeef08093L.U(32.W),
+    0x00800113L.U(32.W),
+    0x00112023L.U(32.W),
+    0x00012183L.U(32.W),
+    0x00308a63L.U(32.W),
+    0x00000063L.U(32.W),
+    0x00700093L.U(32.W),
+    0x00010283L.U(32.W),
+    0x00628863L.U(32.W),
+    0x00a00213L.U(32.W),
+    0x00010303L.U(32.W),
+    0xff1ff56fL.U(32.W),
+    0x00900493L.U(32.W),
+    0xfe000ee3L.U(32.W),
+    0x00000063L.U(32.W),
+    0x00000013L.U(32.W),
+    0x00000013L.U(32.W),
 
   )))
 
   fetcher.io.instrIn := instrReg
+  //fetcher.io.instrIn(0) := 0xdeadc0b7L.U(32.W)
 
   decoder.io.instrIn := fetcher.io.instrOut
 
@@ -109,45 +124,14 @@ class Food(maxCount: Int) extends Module {
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
 
 
-  val switches = Cat(io.switchin, io.switchin2, io.switchin3)
-  Disp.io.xReg := 0.S
-  switch(switches) {
-    is("b000".U) {
-      Disp.io.xReg := x(0)
-    }
-    is("b001".U) {
-      Disp.io.xReg := x(1)
-    }
-    is("b010".U) {
-      Disp.io.xReg := x(2)
-    }
-    is("b011".U) {
-      Disp.io.xReg := x(3)
-    }
-    is("b100".U) {
-      Disp.io.xReg := x(4)
+  val switches = Cat(io.switchin, io.switchin2, io.switchin3, io.switchin4, io.switchin5)
 
-    }
-    is("b101".U) {
-      Disp.io.xReg := x(5)
-    }
-    is("b110".U) {
-      Disp.io.xReg := x(6)
-
-    }
-    is("b111".U) {
-      Disp.io.xReg := x(7)
-
-    }
-
-  }
+  Disp.io.xReg := x(switches)
   io.seg := Disp.io.seg
   io.an := Disp.io.an
 
 
   x(write_backer.io.rdOut) := write_backer.io.ALUoutput
-
-
 
 
 
