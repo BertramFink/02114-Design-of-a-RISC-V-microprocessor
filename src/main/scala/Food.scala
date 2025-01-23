@@ -49,6 +49,7 @@ class Food(maxCount: Int) extends Module {
     0x00000013L.U(32.W),
     0x00000013L.U(32.W),
 
+
   )))
 
   fetcher.io.instrIn := instrReg
