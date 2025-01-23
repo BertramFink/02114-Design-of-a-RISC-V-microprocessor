@@ -3,7 +3,7 @@ import chisel3.util._
 
 class Fetcher() extends Module {
   val io = IO(new Bundle {
-    val instrIn = Input(Vec(18, UInt(32.W))) // Allow external input for instructions
+    // Allow external input for instructions
     val branchIn = Input(SInt(32.W))
     val branchEnable = Input(Bool())
     val shouldMux = Input(Bool())
@@ -15,25 +15,29 @@ class Fetcher() extends Module {
   val pcReg = RegInit(-4.S(32.W))
   val instrReg = RegInit(0.U(32.W))
   val instr = VecInit(Seq(
-    0xdeadc0b7L.U(32.W),
-    0xeef08093L.U(32.W),
-    0x00800113L.U(32.W),
-    0x00112023L.U(32.W),
-    0x00012183L.U(32.W),
-    0x00308a63L.U(32.W),
+    0xf8500093L.U(32.W),
+    0xf8500113L.U(32.W),
+    0x07a00193L.U(32.W),
+    0x02208463L.U(32.W),
+    0x00200213L.U(32.W),
+    0x0030cc63L.U(32.W),
+    0x00400213L.U(32.W),
+    0x00316263L.U(32.W),
+    0x00500213L.U(32.W),
+    0x07a00093L.U(32.W),
+    0x00308663L.U(32.W),
+    0x00300213L.U(32.W),
+    0xfe1154e3L.U(32.W),
+    0x00100213L.U(32.W),
+    0xfc309ce3L.U(32.W),
+    0x00000093L.U(32.W),
+    0x00000113L.U(32.W),
+    0x00000193L.U(32.W),
+    0x00000213L.U(32.W),
     0x00000063L.U(32.W),
-    0x00700093L.U(32.W),
-    0x00010283L.U(32.W),
-    0x00628863L.U(32.W),
-    0x00a00213L.U(32.W),
-    0x00010303L.U(32.W),
-    0xff1ff56fL.U(32.W),
-    0x00900493L.U(32.W),
-    0xfe000ee3L.U(32.W),
-    0x00000063L.U(32.W),
-    0x00000013L.U(32.W),
-    0x00000013L.U(32.W),
+
   ))
+
 
   val branchEnableReg = RegInit(false.B)
   val branchInReg = RegInit(0.S(32.W))

@@ -36,6 +36,7 @@ class ALU extends Module {
   val operand2 = io.operand2
   val imm = io.imm
   val cntReg = RegInit(0.U)
+  val cntReg2 = RegNext(cntReg > 0.U)
   io.wrEna := false.B
   io.rdEna := false.B
   io.rdAddr := 0.U
@@ -46,7 +47,9 @@ class ALU extends Module {
   io.branchOut := 0.S
   io.branchEnable := false.B
   io.pcOut := pcReg
-  val branchedLastTime = RegNext(io.branchEnable, false.B)
+
+  val jump = WireDefault(false.B)
+  jump := false.B
 
   switch(group) {
     is(1.U) { // R and I types
@@ -127,53 +130,56 @@ class ALU extends Module {
       switch(funct3) {
         is(0x0.U) {
           when(operand1 === operand2) {
-            io.branchEnable := Mux(cntReg >0.U, false.B, true.B)
-            io.branchOut := pcReg + imm - 4.S
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
           }
         }
         is(0x1.U) {
           when(operand1 =/= operand2) {
-            io.branchEnable := true.B
-            io.branchOut := pcReg + imm - 4.S
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
 
           }
         }
         is(0x4.U) {
           when(operand1 < operand2) {
-            io.branchEnable := true.B
-            io.branchOut := pcReg + imm - 4.S
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
           }
         }
         is(0x5.U) {
           when(operand1 >= operand2) {
-            io.branchEnable := true.B
-            io.branchOut := pcReg + imm - 4.S
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
           }
         }
 
         is(0x6.U) {
-          when(operand1 < operand2) {
-            io.branchEnable := true.B
-            io.branchOut := pcReg + imm - 4.S
+          when(operand1.asUInt < operand2.asUInt) {
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
           }
         }
         is(0x7.U) {
           when(operand1.asUInt >= operand2.asUInt) {
-            io.branchEnable := true.B
-            io.branchOut := pcReg + imm - 4.S
+            io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+            io.branchOut := pcReg + imm - 8.S
           }
         }
       }
     }
     is(5.U) { //jal
-      io.branchOut := pcReg + imm - 4.S
-      io.branchEnable := true.B
+      io.branchOut := pcReg + imm - 8.S
+      io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
       io.ALUout := pcReg
+      jump := io.branchEnable
     }
     is(6.U) { //jalr
-      io.branchEnable := true.B
-      io.branchOut := operand1 + imm
+      io.branchEnable := Mux(cntReg > 0.U || cntReg2, false.B, true.B)
+      io.branchOut := operand1 + imm -4.S
       io.ALUout := pcReg
+      jump := io.branchEnable
+
     }
     is(7.U) { //LUI
       io.ALUout := ((imm)(19, 0) << 12).asSInt
@@ -182,13 +188,12 @@ class ALU extends Module {
       io.ALUout := pcReg + ((imm)(19, 0) << 12).asSInt
     }
   }
+  val jumped = RegNext(jump)
 
+  val cntNext = Mux(((jump||io.branchEnable && (io.imm >= 12.S))) || ((io.branchEnable && (io.imm <= 0.S))), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 2.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U))) // if branch, set to 2, otherwise stay the same
 
-
-
-  val cntNext = Mux(((io.branchEnable && (io.imm >= 12.S))) || ((io.branchEnable && (io.imm <= 0.S))), 2.U, Mux(io.branchEnable && (io.imm === 8.S), 1.U, Mux(cntReg > 0.U, cntReg - 1.U, 0.U))) // if branch, set to 2, otherwise stay the same
-
-  val rdReg = RegNext(Mux((cntReg > 0.U), 0.U,  io.rdIn))
+  val rdReg = RegNext(Mux((cntReg > 0.U), 0.U, io.rdIn))
+  val redRegNow = Mux((cntReg > 0.U), 0.U, io.rdIn)
 
   val cntNext2 = Mux(cntNext > 0.U, cntNext - 1.U, cntNext) // if >0, decrement, else stay the same
 
@@ -196,8 +201,13 @@ class ALU extends Module {
 
 
   val rdJarReg = RegNext(io.rdIn)
-  io.rdOut := Mux(group === 6.U || group === 5.U, rdJarReg, rdReg)
+  io.rdOut := Mux(group === 6.U || group === 5.U, rdJarReg, Mux((cntReg > 0.U) || io.branchEnable, 0.U, rdReg))
+  io.rdOut := Mux(cntReg >0.U|| group === 4.U , 0.U, rdReg)
 
+  when(cntReg > 0.U || cntReg2) {
+    io.wrEna := false.B
+    io.rdEna := false.B
+  }
 }
 
 

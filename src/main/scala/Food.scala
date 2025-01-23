@@ -29,29 +29,7 @@ class Food(maxCount: Int) extends Module {
   val memorizer = Module(new Memorizer)
   val write_backer = Module(new Write_backer)
   val Disp = Module(new DisplayMux(maxCount))
-  val instrReg = RegInit(VecInit(Seq(
-    0xdeadc0b7L.U(32.W),
-    0xeef08093L.U(32.W),
-    0x00800113L.U(32.W),
-    0x00112023L.U(32.W),
-    0x00012183L.U(32.W),
-    0x00308a63L.U(32.W),
-    0x00000063L.U(32.W),
-    0x00700093L.U(32.W),
-    0x00010283L.U(32.W),
-    0x00628863L.U(32.W),
-    0x00a00213L.U(32.W),
-    0x00010303L.U(32.W),
-    0xff1ff56fL.U(32.W),
-    0x00900493L.U(32.W),
-    0xfe000ee3L.U(32.W),
-    0x00000063L.U(32.W),
-    0x00000013L.U(32.W),
-    0x00000013L.U(32.W),
 
-  )))
-
-  fetcher.io.instrIn := instrReg
   //fetcher.io.instrIn(0) := 0xdeadc0b7L.U(32.W)
 
   decoder.io.instrIn := fetcher.io.instrOut
