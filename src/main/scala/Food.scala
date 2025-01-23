@@ -29,7 +29,7 @@ class Food(maxCount: Int) extends Module {
   val memorizer = Module(new Memorizer)
   val write_backer = Module(new Write_backer)
   val Disp = Module(new DisplayMux(maxCount))
-  
+
   //fetcher.io.instrIn(0) := 0xdeadc0b7L.U(32.W)
 
   decoder.io.instrIn := fetcher.io.instrOut
