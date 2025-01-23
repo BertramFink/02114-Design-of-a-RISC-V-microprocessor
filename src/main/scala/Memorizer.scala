@@ -47,7 +47,7 @@ class Memorizer extends Module {
   val wrAddrReg = RegNext(io.wrAddr, 0.U)
   val memOpReg = RegNext(io.memOp, 0.U)
   val mem = Seq.fill(4) {
-    SyncReadMem(1024, UInt(8.W))
+    SyncReadMem(1080000, UInt(8.W))
   }
   io.wrEnaOut := wrEnaReg
   io.rdEnaOut := rdEnaReg

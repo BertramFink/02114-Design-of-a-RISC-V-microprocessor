@@ -13,25 +13,53 @@ module Fetcher(
 `endif // RANDOMIZE_REG_INIT
   reg [31:0] pcReg; // @[Fetcher.scala 15:22]
   reg [31:0] instrReg; // @[Fetcher.scala 16:25]
-  wire [31:0] _pcPlusReg_T_2 = $signed(io_branchIn) + 32'sh4; // @[Fetcher.scala 38:77]
-  wire [31:0] _pcPlusReg_T_5 = $signed(pcReg) + 32'sh4; // @[Fetcher.scala 38:90]
-  wire [31:0] _pcPlusReg_T_6 = io_branchEnable ? $signed(_pcPlusReg_T_2) : $signed(_pcPlusReg_T_5); // @[Fetcher.scala 38:47]
-  wire [31:0] pcPlusReg = io_shouldMux ? $signed(pcReg) : $signed(_pcPlusReg_T_6); // @[Fetcher.scala 38:22]
-  wire [29:0] _instrReg_T = pcPlusReg[31:2]; // @[Fetcher.scala 42:26]
-  wire [31:0] _GEN_1 = 4'h1 == _instrReg_T[3:0] ? 32'ha00593 : 32'h513; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_2 = 4'h2 == _instrReg_T[3:0] ? 32'h150513 : _GEN_1; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_3 = 4'h3 == _instrReg_T[3:0] ? 32'hfeb51ee3 : _GEN_2; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_4 = 4'h4 == _instrReg_T[3:0] ? 32'hfeb548e3 : _GEN_3; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_5 = 4'h5 == _instrReg_T[3:0] ? 32'hfea5c6e3 : _GEN_4; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_6 = 4'h6 == _instrReg_T[3:0] ? 32'h50613 : _GEN_5; // @[Fetcher.scala 42:{12,12}]
-  wire [31:0] _GEN_7 = 4'h7 == _instrReg_T[3:0] ? 32'ha00893 : _GEN_6; // @[Fetcher.scala 42:{12,12}]
-  assign io_instrOut = instrReg; // @[Fetcher.scala 44:15]
-  assign io_pcOut = pcReg; // @[Fetcher.scala 45:12]
+  wire [31:0] _pcPlusReg_T_2 = $signed(io_branchIn) + 32'sh4; // @[Fetcher.scala 66:77]
+  wire [31:0] _pcPlusReg_T_5 = $signed(pcReg) + 32'sh4; // @[Fetcher.scala 66:90]
+  wire [31:0] _pcPlusReg_T_6 = io_branchEnable ? $signed(_pcPlusReg_T_2) : $signed(_pcPlusReg_T_5); // @[Fetcher.scala 66:47]
+  wire [31:0] pcPlusReg = io_shouldMux ? $signed(pcReg) : $signed(_pcPlusReg_T_6); // @[Fetcher.scala 66:22]
+  wire [29:0] _instrReg_T = pcPlusReg[31:2]; // @[Fetcher.scala 70:26]
+  wire [31:0] _GEN_1 = 6'h1 == _instrReg_T[5:0] ? 32'h68000ef : 32'h40000113; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_2 = 6'h2 == _instrReg_T[5:0] ? 32'ha00893 : _GEN_1; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_3 = 6'h3 == _instrReg_T[5:0] ? 32'h63 : _GEN_2; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_4 = 6'h4 == _instrReg_T[5:0] ? 32'h13 : _GEN_3; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_5 = 6'h5 == _instrReg_T[5:0] ? 32'h13 : _GEN_4; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_6 = 6'h6 == _instrReg_T[5:0] ? 32'hfe010113 : _GEN_5; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_7 = 6'h7 == _instrReg_T[5:0] ? 32'h112e23 : _GEN_6; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_8 = 6'h8 == _instrReg_T[5:0] ? 32'h812c23 : _GEN_7; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_9 = 6'h9 == _instrReg_T[5:0] ? 32'h2010413 : _GEN_8; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_10 = 6'ha == _instrReg_T[5:0] ? 32'hfea42623 : _GEN_9; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_11 = 6'hb == _instrReg_T[5:0] ? 32'hfec42783 : _GEN_10; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_12 = 6'hc == _instrReg_T[5:0] ? 32'hf04663 : _GEN_11; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_13 = 6'hd == _instrReg_T[5:0] ? 32'h100793 : _GEN_12; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_14 = 6'he == _instrReg_T[5:0] ? 32'h200006f : _GEN_13; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_15 = 6'hf == _instrReg_T[5:0] ? 32'hfec42783 : _GEN_14; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_16 = 6'h10 == _instrReg_T[5:0] ? 32'hfff78793 : _GEN_15; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_17 = 6'h11 == _instrReg_T[5:0] ? 32'h78513 : _GEN_16; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_18 = 6'h12 == _instrReg_T[5:0] ? 32'h317 : _GEN_17; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_19 = 6'h13 == _instrReg_T[5:0] ? 32'hfd0300e7 : _GEN_18; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_20 = 6'h14 == _instrReg_T[5:0] ? 32'h50793 : _GEN_19; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_21 = 6'h15 == _instrReg_T[5:0] ? 32'h178793 : _GEN_20; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_22 = 6'h16 == _instrReg_T[5:0] ? 32'h78513 : _GEN_21; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_23 = 6'h17 == _instrReg_T[5:0] ? 32'h1c12083 : _GEN_22; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_24 = 6'h18 == _instrReg_T[5:0] ? 32'h1812403 : _GEN_23; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_25 = 6'h19 == _instrReg_T[5:0] ? 32'h2010113 : _GEN_24; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_26 = 6'h1a == _instrReg_T[5:0] ? 32'h8067 : _GEN_25; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_27 = 6'h1b == _instrReg_T[5:0] ? 32'hff010113 : _GEN_26; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_28 = 6'h1c == _instrReg_T[5:0] ? 32'h112623 : _GEN_27; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_29 = 6'h1d == _instrReg_T[5:0] ? 32'h812423 : _GEN_28; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_30 = 6'h1e == _instrReg_T[5:0] ? 32'h1010413 : _GEN_29; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_31 = 6'h1f == _instrReg_T[5:0] ? 32'h6400513 : _GEN_30; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_32 = 6'h20 == _instrReg_T[5:0] ? 32'h317 : _GEN_31; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_33 = 6'h21 == _instrReg_T[5:0] ? 32'hf98300e7 : _GEN_32; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_34 = 6'h22 == _instrReg_T[5:0] ? 32'h50793 : _GEN_33; // @[Fetcher.scala 70:{12,12}]
+  wire [31:0] _GEN_35 = 6'h23 == _instrReg_T[5:0] ? 32'h78513 : _GEN_34; // @[Fetcher.scala 70:{12,12}]
+  assign io_instrOut = instrReg; // @[Fetcher.scala 72:15]
+  assign io_pcOut = pcReg; // @[Fetcher.scala 73:12]
   always @(posedge clock) begin
     if (reset) begin // @[Fetcher.scala 15:22]
       pcReg <= -32'sh4; // @[Fetcher.scala 15:22]
-    end else if (!(io_shouldMux)) begin // @[Fetcher.scala 38:22]
-      if (io_branchEnable) begin // @[Fetcher.scala 38:47]
+    end else if (!(io_shouldMux)) begin // @[Fetcher.scala 66:22]
+      if (io_branchEnable) begin // @[Fetcher.scala 66:47]
         pcReg <= _pcPlusReg_T_2;
       end else begin
         pcReg <= _pcPlusReg_T_5;
@@ -39,14 +67,14 @@ module Fetcher(
     end
     if (reset) begin // @[Fetcher.scala 16:25]
       instrReg <= 32'h0; // @[Fetcher.scala 16:25]
-    end else if (4'ha == _instrReg_T[3:0]) begin // @[Fetcher.scala 42:12]
-      instrReg <= 32'h13; // @[Fetcher.scala 42:12]
-    end else if (4'h9 == _instrReg_T[3:0]) begin // @[Fetcher.scala 42:12]
-      instrReg <= 32'h13; // @[Fetcher.scala 42:12]
-    end else if (4'h8 == _instrReg_T[3:0]) begin // @[Fetcher.scala 42:12]
-      instrReg <= 32'h63; // @[Fetcher.scala 42:12]
+    end else if (6'h26 == _instrReg_T[5:0]) begin // @[Fetcher.scala 70:12]
+      instrReg <= 32'h1010113; // @[Fetcher.scala 70:12]
+    end else if (6'h25 == _instrReg_T[5:0]) begin // @[Fetcher.scala 70:12]
+      instrReg <= 32'h812403; // @[Fetcher.scala 70:12]
+    end else if (6'h24 == _instrReg_T[5:0]) begin // @[Fetcher.scala 70:12]
+      instrReg <= 32'hc12083; // @[Fetcher.scala 70:12]
     end else begin
-      instrReg <= _GEN_7;
+      instrReg <= _GEN_35;
     end
   end
 // Register and memory initialization
@@ -573,142 +601,144 @@ module ALU(
   reg [31:0] _RAND_3;
 `endif // RANDOMIZE_REG_INIT
   reg [1:0] cntReg; // @[ALU.scala 38:23]
-  wire  _branchCnt_T = cntReg > 2'h0; // @[ALU.scala 50:34]
-  reg  branchCnt; // @[ALU.scala 50:26]
-  wire  _T_1 = 3'h0 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_2 = $signed(io_operand1) + $signed(io_operand2); // @[ALU.scala 56:40]
-  wire [31:0] _io_ALUout_T_5 = $signed(io_operand1) - $signed(io_operand2); // @[ALU.scala 59:44]
-  wire [31:0] _GEN_0 = 7'h20 == io_funct7 ? $signed(_io_ALUout_T_5) : $signed(_io_ALUout_T_2); // @[ALU.scala 56:21 57:26 59:25]
-  wire  _T_3 = 3'h4 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_7 = $signed(io_operand1) ^ $signed(io_operand2); // @[ALU.scala 64:40]
-  wire  _T_4 = 3'h6 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_9 = $signed(io_operand1) | $signed(io_operand2); // @[ALU.scala 67:40]
-  wire  _T_5 = 3'h7 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_11 = $signed(io_operand1) & $signed(io_operand2); // @[ALU.scala 70:40]
-  wire  _T_6 = 3'h1 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_12 = io_operand1; // @[ALU.scala 73:34]
-  wire [31:0] _io_ALUout_T_13 = io_operand2; // @[ALU.scala 73:53]
-  wire [524318:0] _GEN_55 = {{524287'd0}, _io_ALUout_T_12}; // @[ALU.scala 73:41]
-  wire [524318:0] _io_ALUout_T_16 = _GEN_55 << _io_ALUout_T_13[18:0]; // @[ALU.scala 73:68]
-  wire  _T_7 = 3'h5 == io_funct3; // @[ALU.scala 54:22]
-  wire [31:0] _io_ALUout_T_20 = io_operand1 >> io_operand2; // @[ALU.scala 76:61]
-  wire [31:0] _io_ALUout_T_22 = $signed(io_operand1) >>> io_operand2; // @[ALU.scala 78:35]
-  wire [31:0] _GEN_1 = io_funct7 == 7'h20 ? $signed(_io_ALUout_T_22) : $signed(_io_ALUout_T_20); // @[ALU.scala 76:21 77:35 78:23]
-  wire  _T_9 = 3'h2 == io_funct3; // @[ALU.scala 54:22]
-  wire  _io_ALUout_T_23 = $signed(io_operand1) < $signed(io_operand2); // @[ALU.scala 82:44]
-  wire [1:0] _io_ALUout_T_24 = $signed(io_operand1) < $signed(io_operand2) ? $signed(2'sh1) : $signed(2'sh0); // @[ALU.scala 82:27]
-  wire  _io_ALUout_T_27 = io_operand1 < io_operand2; // @[ALU.scala 85:44]
-  wire [1:0] _io_ALUout_T_28 = io_operand1 < io_operand2 ? $signed(2'sh1) : $signed(2'sh0); // @[ALU.scala 85:27]
-  wire [1:0] _GEN_2 = 3'h3 == io_funct3 ? $signed(_io_ALUout_T_28) : $signed(2'sh0); // @[ALU.scala 45:13 54:22 85:21]
-  wire [1:0] _GEN_3 = 3'h2 == io_funct3 ? $signed(_io_ALUout_T_24) : $signed(_GEN_2); // @[ALU.scala 54:22 82:21]
-  wire [31:0] _GEN_4 = 3'h5 == io_funct3 ? $signed(_GEN_1) : $signed({{30{_GEN_3[1]}},_GEN_3}); // @[ALU.scala 54:22]
-  wire [524318:0] _GEN_5 = 3'h1 == io_funct3 ? $signed(_io_ALUout_T_16) : $signed({{524287{_GEN_4[31]}},_GEN_4}); // @[ALU.scala 54:22 73:21]
+  wire  _cntReg2_T = cntReg > 2'h0; // @[ALU.scala 51:32]
+  reg  cntReg2; // @[ALU.scala 51:24]
+  wire  _T_1 = 3'h0 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_2 = $signed(io_operand1) + $signed(io_operand2); // @[ALU.scala 57:40]
+  wire [31:0] _io_ALUout_T_5 = $signed(io_operand1) - $signed(io_operand2); // @[ALU.scala 60:44]
+  wire [31:0] _GEN_0 = 7'h20 == io_funct7 ? $signed(_io_ALUout_T_5) : $signed(_io_ALUout_T_2); // @[ALU.scala 57:21 58:26 60:25]
+  wire  _T_3 = 3'h4 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_7 = $signed(io_operand1) ^ $signed(io_operand2); // @[ALU.scala 65:40]
+  wire  _T_4 = 3'h6 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_9 = $signed(io_operand1) | $signed(io_operand2); // @[ALU.scala 68:40]
+  wire  _T_5 = 3'h7 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_11 = $signed(io_operand1) & $signed(io_operand2); // @[ALU.scala 71:40]
+  wire  _T_6 = 3'h1 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_12 = io_operand1; // @[ALU.scala 74:34]
+  wire [31:0] _io_ALUout_T_13 = io_operand2; // @[ALU.scala 74:53]
+  wire [524318:0] _GEN_55 = {{524287'd0}, _io_ALUout_T_12}; // @[ALU.scala 74:41]
+  wire [524318:0] _io_ALUout_T_16 = _GEN_55 << _io_ALUout_T_13[18:0]; // @[ALU.scala 74:68]
+  wire  _T_7 = 3'h5 == io_funct3; // @[ALU.scala 55:22]
+  wire [31:0] _io_ALUout_T_20 = io_operand1 >> io_operand2; // @[ALU.scala 77:61]
+  wire [31:0] _io_ALUout_T_22 = $signed(io_operand1) >>> io_operand2; // @[ALU.scala 79:35]
+  wire [31:0] _GEN_1 = io_funct7 == 7'h20 ? $signed(_io_ALUout_T_22) : $signed(_io_ALUout_T_20); // @[ALU.scala 77:21 78:35 79:23]
+  wire  _T_9 = 3'h2 == io_funct3; // @[ALU.scala 55:22]
+  wire  _io_ALUout_T_23 = $signed(io_operand1) < $signed(io_operand2); // @[ALU.scala 83:44]
+  wire [1:0] _io_ALUout_T_24 = $signed(io_operand1) < $signed(io_operand2) ? $signed(2'sh1) : $signed(2'sh0); // @[ALU.scala 83:27]
+  wire  _io_ALUout_T_27 = io_operand1 < io_operand2; // @[ALU.scala 86:44]
+  wire [1:0] _io_ALUout_T_28 = io_operand1 < io_operand2 ? $signed(2'sh1) : $signed(2'sh0); // @[ALU.scala 86:27]
+  wire [1:0] _GEN_2 = 3'h3 == io_funct3 ? $signed(_io_ALUout_T_28) : $signed(2'sh0); // @[ALU.scala 45:13 55:22 86:21]
+  wire [1:0] _GEN_3 = 3'h2 == io_funct3 ? $signed(_io_ALUout_T_24) : $signed(_GEN_2); // @[ALU.scala 55:22 83:21]
+  wire [31:0] _GEN_4 = 3'h5 == io_funct3 ? $signed(_GEN_1) : $signed({{30{_GEN_3[1]}},_GEN_3}); // @[ALU.scala 55:22]
+  wire [524318:0] _GEN_5 = 3'h1 == io_funct3 ? $signed(_io_ALUout_T_16) : $signed({{524287{_GEN_4[31]}},_GEN_4}); // @[ALU.scala 55:22 74:21]
   wire [524318:0] _GEN_6 = 3'h7 == io_funct3 ? $signed({{524287{_io_ALUout_T_11[31]}},_io_ALUout_T_11}) : $signed(_GEN_5
-    ); // @[ALU.scala 54:22 70:21]
-  wire [524318:0] _GEN_7 = 3'h6 == io_funct3 ? $signed({{524287{_io_ALUout_T_9[31]}},_io_ALUout_T_9}) : $signed(_GEN_6); // @[ALU.scala 54:22 67:21]
-  wire [524318:0] _GEN_8 = 3'h4 == io_funct3 ? $signed({{524287{_io_ALUout_T_7[31]}},_io_ALUout_T_7}) : $signed(_GEN_7); // @[ALU.scala 54:22 64:21]
-  wire [524318:0] _GEN_9 = 3'h0 == io_funct3 ? $signed({{524287{_GEN_0[31]}},_GEN_0}) : $signed(_GEN_8); // @[ALU.scala 54:22]
-  wire [31:0] _io_rdAddr_T_2 = $signed(io_operand1) + $signed(io_imm); // @[ALU.scala 90:30]
-  wire [2:0] _GEN_10 = _T_7 ? 3'h5 : 3'h0; // @[ALU.scala 107:20 43:12 92:22]
-  wire [2:0] _GEN_11 = _T_3 ? 3'h4 : _GEN_10; // @[ALU.scala 104:20 92:22]
-  wire [2:0] _GEN_12 = _T_9 ? 3'h3 : _GEN_11; // @[ALU.scala 101:20 92:22]
-  wire [2:0] _GEN_13 = _T_6 ? 3'h2 : _GEN_12; // @[ALU.scala 92:22 98:20]
-  wire [2:0] _GEN_14 = _T_1 ? 3'h1 : _GEN_13; // @[ALU.scala 92:22 95:20]
-  wire [1:0] _GEN_15 = _T_9 ? 2'h3 : 2'h0; // @[ALU.scala 115:22 123:20 43:12]
-  wire [1:0] _GEN_16 = _T_6 ? 2'h2 : _GEN_15; // @[ALU.scala 115:22 120:20]
-  wire [1:0] _GEN_17 = _T_1 ? 2'h1 : _GEN_16; // @[ALU.scala 115:22 117:20]
-  wire  _io_branchEnable_T_2 = _branchCnt_T | branchCnt ? 1'h0 : 1'h1; // @[ALU.scala 131:35]
-  wire [31:0] _io_branchOut_T_2 = $signed(io_pcIn) + $signed(io_imm); // @[ALU.scala 132:35]
-  wire [31:0] _io_branchOut_T_5 = $signed(_io_branchOut_T_2) - 32'sh8; // @[ALU.scala 132:41]
-  wire  _GEN_18 = $signed(io_operand1) == $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 130:39 131:29 47:19]
-  wire [31:0] _GEN_19 = $signed(io_operand1) == $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 130:39 132:26 46:16]
-  wire  _GEN_20 = $signed(io_operand1) != $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 136:39 137:29 47:19]
-  wire [31:0] _GEN_21 = $signed(io_operand1) != $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 136:39 138:26 46:16]
-  wire  _GEN_22 = _io_ALUout_T_23 & _io_branchEnable_T_2; // @[ALU.scala 143:37 144:29 47:19]
-  wire [31:0] _GEN_23 = _io_ALUout_T_23 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 143:37 145:26 46:16]
-  wire  _GEN_24 = $signed(io_operand1) >= $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 149:38 150:29 47:19]
-  wire [31:0] _GEN_25 = $signed(io_operand1) >= $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 149:38 151:26 46:16]
-  wire  _GEN_26 = _io_ALUout_T_27 & _io_branchEnable_T_2; // @[ALU.scala 156:51 157:29 47:19]
-  wire [31:0] _GEN_27 = _io_ALUout_T_27 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 156:51 158:26 46:16]
-  wire  _GEN_28 = io_operand1 >= io_operand2 & _io_branchEnable_T_2; // @[ALU.scala 162:52 163:29 47:19]
-  wire [31:0] _GEN_29 = io_operand1 >= io_operand2 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 162:52 164:26 46:16]
-  wire  _GEN_30 = _T_5 & _GEN_28; // @[ALU.scala 128:22 47:19]
-  wire [31:0] _GEN_31 = _T_5 ? $signed(_GEN_29) : $signed(32'sh0); // @[ALU.scala 128:22 46:16]
-  wire  _GEN_32 = _T_4 ? _GEN_26 : _GEN_30; // @[ALU.scala 128:22]
-  wire [31:0] _GEN_33 = _T_4 ? $signed(_GEN_27) : $signed(_GEN_31); // @[ALU.scala 128:22]
-  wire  _GEN_34 = _T_7 ? _GEN_24 : _GEN_32; // @[ALU.scala 128:22]
-  wire [31:0] _GEN_35 = _T_7 ? $signed(_GEN_25) : $signed(_GEN_33); // @[ALU.scala 128:22]
-  wire  _GEN_36 = _T_3 ? _GEN_22 : _GEN_34; // @[ALU.scala 128:22]
-  wire [31:0] _GEN_37 = _T_3 ? $signed(_GEN_23) : $signed(_GEN_35); // @[ALU.scala 128:22]
-  wire  _GEN_38 = _T_6 ? _GEN_20 : _GEN_36; // @[ALU.scala 128:22]
-  wire [31:0] _GEN_39 = _T_6 ? $signed(_GEN_21) : $signed(_GEN_37); // @[ALU.scala 128:22]
-  wire  _GEN_40 = _T_1 ? _GEN_18 : _GEN_38; // @[ALU.scala 128:22]
-  wire [31:0] _GEN_41 = _T_1 ? $signed(_GEN_19) : $signed(_GEN_39); // @[ALU.scala 128:22]
-  wire [31:0] _io_branchOut_T_41 = $signed(_io_branchOut_T_2) - 32'sh4; // @[ALU.scala 170:35]
-  wire  _io_branchEnable_T_19 = _branchCnt_T ? 1'h0 : 1'h1; // @[ALU.scala 171:29]
-  wire [31:0] _io_ALUout_T_31 = {io_imm[19:0], 12'h0}; // @[ALU.scala 180:41]
-  wire [31:0] _io_ALUout_T_37 = $signed(io_pcIn) + $signed(_io_ALUout_T_31); // @[ALU.scala 183:26]
-  wire [31:0] _GEN_42 = 4'h8 == io_group ? $signed(_io_ALUout_T_37) : $signed(32'sh0); // @[ALU.scala 183:17 45:13 52:17]
-  wire [31:0] _GEN_43 = 4'h7 == io_group ? $signed(_io_ALUout_T_31) : $signed(_GEN_42); // @[ALU.scala 180:17 52:17]
-  wire  _GEN_44 = 4'h6 == io_group & _io_branchEnable_T_19; // @[ALU.scala 52:17 175:23 47:19]
-  wire [31:0] _GEN_45 = 4'h6 == io_group ? $signed(_io_rdAddr_T_2) : $signed(32'sh0); // @[ALU.scala 52:17 176:20 46:16]
-  wire [31:0] _GEN_46 = 4'h6 == io_group ? $signed(io_pcIn) : $signed(_GEN_43); // @[ALU.scala 177:17 52:17]
-  wire [31:0] _GEN_47 = 4'h5 == io_group ? $signed(_io_branchOut_T_41) : $signed(_GEN_45); // @[ALU.scala 52:17 170:20]
-  wire  _GEN_48 = 4'h5 == io_group ? _io_branchEnable_T_19 : _GEN_44; // @[ALU.scala 52:17 171:23]
-  wire [31:0] _GEN_49 = 4'h5 == io_group ? $signed(io_pcIn) : $signed(_GEN_46); // @[ALU.scala 172:17 52:17]
-  wire  _GEN_50 = 4'h4 == io_group ? _GEN_40 : _GEN_48; // @[ALU.scala 52:17]
-  wire [31:0] _GEN_51 = 4'h4 == io_group ? $signed(_GEN_41) : $signed(_GEN_47); // @[ALU.scala 52:17]
-  wire [31:0] _GEN_52 = 4'h4 == io_group ? $signed(32'sh0) : $signed(_GEN_49); // @[ALU.scala 45:13 52:17]
-  wire [31:0] _GEN_53 = 4'h3 == io_group ? $signed(io_operand2) : $signed(_GEN_52); // @[ALU.scala 112:17 52:17]
-  wire [9:0] _GEN_54 = 4'h3 == io_group ? _io_rdAddr_T_2[9:0] : 10'h0; // @[ALU.scala 113:17 42:13 52:17]
-  wire [1:0] _GEN_56 = 4'h3 == io_group ? _GEN_17 : 2'h0; // @[ALU.scala 43:12 52:17]
-  wire  _GEN_57 = 4'h3 == io_group ? 1'h0 : _GEN_50; // @[ALU.scala 52:17 47:19]
-  wire [31:0] _GEN_58 = 4'h3 == io_group ? $signed(32'sh0) : $signed(_GEN_51); // @[ALU.scala 46:16 52:17]
-  wire [9:0] _GEN_59 = 4'h2 == io_group ? _io_rdAddr_T_2[9:0] : 10'h0; // @[ALU.scala 41:13 52:17 90:17]
-  wire [2:0] _GEN_61 = 4'h2 == io_group ? _GEN_14 : {{1'd0}, _GEN_56}; // @[ALU.scala 52:17]
-  wire [31:0] _GEN_62 = 4'h2 == io_group ? $signed(32'sh0) : $signed(_GEN_53); // @[ALU.scala 45:13 52:17]
-  wire [9:0] _GEN_63 = 4'h2 == io_group ? 10'h0 : _GEN_54; // @[ALU.scala 42:13 52:17]
-  wire  _GEN_64 = 4'h2 == io_group ? 1'h0 : 4'h3 == io_group; // @[ALU.scala 39:12 52:17]
-  wire  _GEN_65 = 4'h2 == io_group ? 1'h0 : _GEN_57; // @[ALU.scala 52:17 47:19]
-  wire [31:0] _GEN_66 = 4'h2 == io_group ? $signed(32'sh0) : $signed(_GEN_58); // @[ALU.scala 46:16 52:17]
-  wire [524318:0] _GEN_67 = 4'h1 == io_group ? $signed(_GEN_9) : $signed({{524287{_GEN_62[31]}},_GEN_62}); // @[ALU.scala 52:17]
-  wire [1:0] _cntNext_T_9 = cntReg - 2'h1; // @[ALU.scala 190:180]
-  wire [1:0] _cntNext_T_10 = _branchCnt_T ? _cntNext_T_9 : 2'h0; // @[ALU.scala 190:158]
-  wire [1:0] _cntNext_T_11 = io_branchEnable & $signed(io_imm) == 32'sh8 ? 2'h1 : _cntNext_T_10; // @[ALU.scala 190:112]
+    ); // @[ALU.scala 55:22 71:21]
+  wire [524318:0] _GEN_7 = 3'h6 == io_funct3 ? $signed({{524287{_io_ALUout_T_9[31]}},_io_ALUout_T_9}) : $signed(_GEN_6); // @[ALU.scala 55:22 68:21]
+  wire [524318:0] _GEN_8 = 3'h4 == io_funct3 ? $signed({{524287{_io_ALUout_T_7[31]}},_io_ALUout_T_7}) : $signed(_GEN_7); // @[ALU.scala 55:22 65:21]
+  wire [524318:0] _GEN_9 = 3'h0 == io_funct3 ? $signed({{524287{_GEN_0[31]}},_GEN_0}) : $signed(_GEN_8); // @[ALU.scala 55:22]
+  wire [31:0] _io_rdAddr_T_2 = $signed(io_operand1) + $signed(io_imm); // @[ALU.scala 91:30]
+  wire [2:0] _GEN_10 = _T_7 ? 3'h5 : 3'h0; // @[ALU.scala 108:20 43:12 93:22]
+  wire [2:0] _GEN_11 = _T_3 ? 3'h4 : _GEN_10; // @[ALU.scala 105:20 93:22]
+  wire [2:0] _GEN_12 = _T_9 ? 3'h3 : _GEN_11; // @[ALU.scala 102:20 93:22]
+  wire [2:0] _GEN_13 = _T_6 ? 3'h2 : _GEN_12; // @[ALU.scala 93:22 99:20]
+  wire [2:0] _GEN_14 = _T_1 ? 3'h1 : _GEN_13; // @[ALU.scala 93:22 96:20]
+  wire [1:0] _GEN_15 = _T_9 ? 2'h3 : 2'h0; // @[ALU.scala 116:22 124:20 43:12]
+  wire [1:0] _GEN_16 = _T_6 ? 2'h2 : _GEN_15; // @[ALU.scala 116:22 121:20]
+  wire [1:0] _GEN_17 = _T_1 ? 2'h1 : _GEN_16; // @[ALU.scala 116:22 118:20]
+  wire  _io_branchEnable_T_1 = _cntReg2_T | cntReg2; // @[ALU.scala 132:48]
+  wire  _io_branchEnable_T_2 = _cntReg2_T | cntReg2 ? 1'h0 : 1'h1; // @[ALU.scala 132:35]
+  wire [31:0] _io_branchOut_T_2 = $signed(io_pcIn) + $signed(io_imm); // @[ALU.scala 133:35]
+  wire [31:0] _io_branchOut_T_5 = $signed(_io_branchOut_T_2) - 32'sh8; // @[ALU.scala 133:41]
+  wire  _GEN_18 = $signed(io_operand1) == $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 131:39 132:29 47:19]
+  wire [31:0] _GEN_19 = $signed(io_operand1) == $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 131:39 133:26 46:16]
+  wire  _GEN_20 = $signed(io_operand1) != $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 137:39 138:29 47:19]
+  wire [31:0] _GEN_21 = $signed(io_operand1) != $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 137:39 139:26 46:16]
+  wire  _GEN_22 = _io_ALUout_T_23 & _io_branchEnable_T_2; // @[ALU.scala 144:37 145:29 47:19]
+  wire [31:0] _GEN_23 = _io_ALUout_T_23 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 144:37 146:26 46:16]
+  wire  _GEN_24 = $signed(io_operand1) >= $signed(io_operand2) & _io_branchEnable_T_2; // @[ALU.scala 150:38 151:29 47:19]
+  wire [31:0] _GEN_25 = $signed(io_operand1) >= $signed(io_operand2) ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 150:38 152:26 46:16]
+  wire  _GEN_26 = _io_ALUout_T_27 & _io_branchEnable_T_2; // @[ALU.scala 157:51 158:29 47:19]
+  wire [31:0] _GEN_27 = _io_ALUout_T_27 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 157:51 159:26 46:16]
+  wire  _GEN_28 = io_operand1 >= io_operand2 & _io_branchEnable_T_2; // @[ALU.scala 163:52 164:29 47:19]
+  wire [31:0] _GEN_29 = io_operand1 >= io_operand2 ? $signed(_io_branchOut_T_5) : $signed(32'sh0); // @[ALU.scala 163:52 165:26 46:16]
+  wire  _GEN_30 = _T_5 & _GEN_28; // @[ALU.scala 129:22 47:19]
+  wire [31:0] _GEN_31 = _T_5 ? $signed(_GEN_29) : $signed(32'sh0); // @[ALU.scala 129:22 46:16]
+  wire  _GEN_32 = _T_4 ? _GEN_26 : _GEN_30; // @[ALU.scala 129:22]
+  wire [31:0] _GEN_33 = _T_4 ? $signed(_GEN_27) : $signed(_GEN_31); // @[ALU.scala 129:22]
+  wire  _GEN_34 = _T_7 ? _GEN_24 : _GEN_32; // @[ALU.scala 129:22]
+  wire [31:0] _GEN_35 = _T_7 ? $signed(_GEN_25) : $signed(_GEN_33); // @[ALU.scala 129:22]
+  wire  _GEN_36 = _T_3 ? _GEN_22 : _GEN_34; // @[ALU.scala 129:22]
+  wire [31:0] _GEN_37 = _T_3 ? $signed(_GEN_23) : $signed(_GEN_35); // @[ALU.scala 129:22]
+  wire  _GEN_38 = _T_6 ? _GEN_20 : _GEN_36; // @[ALU.scala 129:22]
+  wire [31:0] _GEN_39 = _T_6 ? $signed(_GEN_21) : $signed(_GEN_37); // @[ALU.scala 129:22]
+  wire  _GEN_40 = _T_1 ? _GEN_18 : _GEN_38; // @[ALU.scala 129:22]
+  wire [31:0] _GEN_41 = _T_1 ? $signed(_GEN_19) : $signed(_GEN_39); // @[ALU.scala 129:22]
+  wire [31:0] _io_branchOut_T_47 = $signed(_io_rdAddr_T_2) - 32'sh8; // @[ALU.scala 177:38]
+  wire [31:0] _io_ALUout_T_31 = {io_imm[19:0], 12'h0}; // @[ALU.scala 181:41]
+  wire [31:0] _io_ALUout_T_37 = $signed(io_pcIn) + $signed(_io_ALUout_T_31); // @[ALU.scala 184:26]
+  wire [31:0] _GEN_42 = 4'h8 == io_group ? $signed(_io_ALUout_T_37) : $signed(32'sh0); // @[ALU.scala 184:17 45:13 53:17]
+  wire [31:0] _GEN_43 = 4'h7 == io_group ? $signed(_io_ALUout_T_31) : $signed(_GEN_42); // @[ALU.scala 181:17 53:17]
+  wire  _GEN_44 = 4'h6 == io_group & _io_branchEnable_T_2; // @[ALU.scala 53:17 176:23 47:19]
+  wire [31:0] _GEN_45 = 4'h6 == io_group ? $signed(_io_branchOut_T_47) : $signed(32'sh0); // @[ALU.scala 53:17 177:20 46:16]
+  wire [31:0] _GEN_46 = 4'h6 == io_group ? $signed(io_pcIn) : $signed(_GEN_43); // @[ALU.scala 178:17 53:17]
+  wire [31:0] _GEN_47 = 4'h5 == io_group ? $signed(_io_branchOut_T_5) : $signed(_GEN_45); // @[ALU.scala 53:17 171:20]
+  wire  _GEN_48 = 4'h5 == io_group ? _io_branchEnable_T_2 : _GEN_44; // @[ALU.scala 53:17 172:23]
+  wire [31:0] _GEN_49 = 4'h5 == io_group ? $signed(io_pcIn) : $signed(_GEN_46); // @[ALU.scala 173:17 53:17]
+  wire  _GEN_50 = 4'h4 == io_group ? _GEN_40 : _GEN_48; // @[ALU.scala 53:17]
+  wire [31:0] _GEN_51 = 4'h4 == io_group ? $signed(_GEN_41) : $signed(_GEN_47); // @[ALU.scala 53:17]
+  wire [31:0] _GEN_52 = 4'h4 == io_group ? $signed(32'sh0) : $signed(_GEN_49); // @[ALU.scala 45:13 53:17]
+  wire [31:0] _GEN_53 = 4'h3 == io_group ? $signed(io_operand2) : $signed(_GEN_52); // @[ALU.scala 113:17 53:17]
+  wire [9:0] _GEN_54 = 4'h3 == io_group ? _io_rdAddr_T_2[9:0] : 10'h0; // @[ALU.scala 114:17 42:13 53:17]
+  wire [1:0] _GEN_56 = 4'h3 == io_group ? _GEN_17 : 2'h0; // @[ALU.scala 43:12 53:17]
+  wire  _GEN_57 = 4'h3 == io_group ? 1'h0 : _GEN_50; // @[ALU.scala 53:17 47:19]
+  wire [31:0] _GEN_58 = 4'h3 == io_group ? $signed(32'sh0) : $signed(_GEN_51); // @[ALU.scala 46:16 53:17]
+  wire [9:0] _GEN_59 = 4'h2 == io_group ? _io_rdAddr_T_2[9:0] : 10'h0; // @[ALU.scala 41:13 53:17 91:17]
+  wire [2:0] _GEN_61 = 4'h2 == io_group ? _GEN_14 : {{1'd0}, _GEN_56}; // @[ALU.scala 53:17]
+  wire [31:0] _GEN_62 = 4'h2 == io_group ? $signed(32'sh0) : $signed(_GEN_53); // @[ALU.scala 45:13 53:17]
+  wire [9:0] _GEN_63 = 4'h2 == io_group ? 10'h0 : _GEN_54; // @[ALU.scala 42:13 53:17]
+  wire  _GEN_64 = 4'h2 == io_group ? 1'h0 : 4'h3 == io_group; // @[ALU.scala 39:12 53:17]
+  wire  _GEN_65 = 4'h2 == io_group ? 1'h0 : _GEN_57; // @[ALU.scala 53:17 47:19]
+  wire [31:0] _GEN_66 = 4'h2 == io_group ? $signed(32'sh0) : $signed(_GEN_58); // @[ALU.scala 46:16 53:17]
+  wire [524318:0] _GEN_67 = 4'h1 == io_group ? $signed(_GEN_9) : $signed({{524287{_GEN_62[31]}},_GEN_62}); // @[ALU.scala 53:17]
+  wire  _GEN_69 = 4'h1 == io_group ? 1'h0 : 4'h2 == io_group; // @[ALU.scala 40:12 53:17]
+  wire  _GEN_72 = 4'h1 == io_group ? 1'h0 : _GEN_64; // @[ALU.scala 39:12 53:17]
+  wire [1:0] _cntNext_T_9 = cntReg - 2'h1; // @[ALU.scala 191:180]
+  wire [1:0] _cntNext_T_10 = _cntReg2_T ? _cntNext_T_9 : 2'h0; // @[ALU.scala 191:158]
+  wire [1:0] _cntNext_T_11 = io_branchEnable & $signed(io_imm) == 32'sh8 ? 2'h1 : _cntNext_T_10; // @[ALU.scala 191:112]
   wire [1:0] cntNext = io_branchEnable & $signed(io_imm) >= 32'shc | io_branchEnable & $signed(io_imm) <= 32'sh0 ? 2'h2
-     : _cntNext_T_11; // @[ALU.scala 190:20]
-  reg [4:0] rdReg; // @[ALU.scala 192:22]
-  wire [1:0] _cntNext2_T_2 = cntNext - 2'h1; // @[ALU.scala 195:45]
-  reg [4:0] rdJarReg; // @[ALU.scala 200:25]
-  wire [4:0] _io_rdOut_T_5 = _branchCnt_T | io_branchEnable ? 5'h0 : rdReg; // @[ALU.scala 201:64]
-  assign io_branchOut = 4'h1 == io_group ? $signed(32'sh0) : $signed(_GEN_66); // @[ALU.scala 46:16 52:17]
-  assign io_branchEnable = 4'h1 == io_group ? 1'h0 : _GEN_65; // @[ALU.scala 52:17 47:19]
+     : _cntNext_T_11; // @[ALU.scala 191:20]
+  reg [4:0] rdReg; // @[ALU.scala 193:22]
+  wire [1:0] _cntNext2_T_2 = cntNext - 2'h1; // @[ALU.scala 196:45]
+  reg [4:0] rdJarReg; // @[ALU.scala 201:25]
+  wire [4:0] _io_rdOut_T_5 = _cntReg2_T | io_branchEnable ? 5'h0 : rdReg; // @[ALU.scala 202:64]
+  assign io_branchOut = 4'h1 == io_group ? $signed(32'sh0) : $signed(_GEN_66); // @[ALU.scala 46:16 53:17]
+  assign io_branchEnable = 4'h1 == io_group ? 1'h0 : _GEN_65; // @[ALU.scala 53:17 47:19]
   assign io_ALUout = _GEN_67[31:0];
-  assign io_rdAddr = 4'h1 == io_group ? 10'h0 : _GEN_59; // @[ALU.scala 41:13 52:17]
-  assign io_wrAddr = 4'h1 == io_group ? 10'h0 : _GEN_63; // @[ALU.scala 42:13 52:17]
-  assign io_wrEna = 4'h1 == io_group ? 1'h0 : _GEN_64; // @[ALU.scala 39:12 52:17]
-  assign io_rdEna = 4'h1 == io_group ? 1'h0 : 4'h2 == io_group; // @[ALU.scala 40:12 52:17]
-  assign io_memOp = 4'h1 == io_group ? 3'h0 : _GEN_61; // @[ALU.scala 43:12 52:17]
-  assign io_rdOut = io_group == 4'h6 | io_group == 4'h5 ? rdJarReg : _io_rdOut_T_5; // @[ALU.scala 201:18]
+  assign io_rdAddr = 4'h1 == io_group ? 10'h0 : _GEN_59; // @[ALU.scala 41:13 53:17]
+  assign io_wrAddr = 4'h1 == io_group ? 10'h0 : _GEN_63; // @[ALU.scala 42:13 53:17]
+  assign io_wrEna = _io_branchEnable_T_1 ? 1'h0 : _GEN_72; // @[ALU.scala 204:32 205:14]
+  assign io_rdEna = _io_branchEnable_T_1 ? 1'h0 : _GEN_69; // @[ALU.scala 204:32 206:14]
+  assign io_memOp = 4'h1 == io_group ? 3'h0 : _GEN_61; // @[ALU.scala 43:12 53:17]
+  assign io_rdOut = io_group == 4'h6 | io_group == 4'h5 ? rdJarReg : _io_rdOut_T_5; // @[ALU.scala 202:18]
   always @(posedge clock) begin
     if (reset) begin // @[ALU.scala 38:23]
       cntReg <= 2'h0; // @[ALU.scala 38:23]
-    end else if (cntNext > 2'h0) begin // @[ALU.scala 195:21]
+    end else if (cntNext > 2'h0) begin // @[ALU.scala 196:21]
       cntReg <= _cntNext2_T_2;
-    end else if (io_branchEnable & $signed(io_imm) >= 32'shc | io_branchEnable & $signed(io_imm) <= 32'sh0) begin // @[ALU.scala 190:20]
+    end else if (io_branchEnable & $signed(io_imm) >= 32'shc | io_branchEnable & $signed(io_imm) <= 32'sh0) begin // @[ALU.scala 191:20]
       cntReg <= 2'h2;
-    end else if (io_branchEnable & $signed(io_imm) == 32'sh8) begin // @[ALU.scala 190:112]
+    end else if (io_branchEnable & $signed(io_imm) == 32'sh8) begin // @[ALU.scala 191:112]
       cntReg <= 2'h1;
     end else begin
       cntReg <= _cntNext_T_10;
     end
-    branchCnt <= cntReg > 2'h0; // @[ALU.scala 50:34]
-    if (_branchCnt_T) begin // @[ALU.scala 192:26]
+    cntReg2 <= cntReg > 2'h0; // @[ALU.scala 51:32]
+    if (_cntReg2_T) begin // @[ALU.scala 193:26]
       rdReg <= 5'h0;
     end else begin
       rdReg <= io_rdIn;
     end
-    rdJarReg <= io_rdIn; // @[ALU.scala 200:25]
+    rdJarReg <= io_rdIn; // @[ALU.scala 201:25]
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
@@ -749,7 +779,7 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   cntReg = _RAND_0[1:0];
   _RAND_1 = {1{`RANDOM}};
-  branchCnt = _RAND_1[0:0];
+  cntReg2 = _RAND_1[0:0];
   _RAND_2 = {1{`RANDOM}};
   rdReg = _RAND_2[4:0];
   _RAND_3 = {1{`RANDOM}};
@@ -784,23 +814,25 @@ module Memorizer(
   output [4:0]  io_rdOutput,
   output [31:0] io_ALUoutput
 );
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+  reg [31:0] _RAND_1;
+  reg [31:0] _RAND_5;
+  reg [31:0] _RAND_9;
+  reg [31:0] _RAND_13;
+`endif // RANDOMIZE_GARBAGE_ASSIGN
 `ifdef RANDOMIZE_MEM_INIT
   reg [31:0] _RAND_0;
-  reg [31:0] _RAND_3;
-  reg [31:0] _RAND_6;
-  reg [31:0] _RAND_9;
+  reg [31:0] _RAND_4;
+  reg [31:0] _RAND_8;
+  reg [31:0] _RAND_12;
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
-  reg [31:0] _RAND_1;
   reg [31:0] _RAND_2;
-  reg [31:0] _RAND_4;
-  reg [31:0] _RAND_5;
+  reg [31:0] _RAND_3;
+  reg [31:0] _RAND_6;
   reg [31:0] _RAND_7;
-  reg [31:0] _RAND_8;
   reg [31:0] _RAND_10;
   reg [31:0] _RAND_11;
-  reg [31:0] _RAND_12;
-  reg [31:0] _RAND_13;
   reg [31:0] _RAND_14;
   reg [31:0] _RAND_15;
   reg [31:0] _RAND_16;
@@ -812,87 +844,91 @@ module Memorizer(
   reg [31:0] _RAND_22;
   reg [31:0] _RAND_23;
   reg [31:0] _RAND_24;
+  reg [31:0] _RAND_25;
+  reg [31:0] _RAND_26;
+  reg [31:0] _RAND_27;
+  reg [31:0] _RAND_28;
 `endif // RANDOMIZE_REG_INIT
-  reg [7:0] mem_0 [0:1023]; // @[Memorizer.scala 50:16]
+  reg [7:0] mem_0 [0:1079999]; // @[Memorizer.scala 50:16]
   wire  mem_0_readByte_0_en; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_0_readByte_0_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_0_readByte_0_addr; // @[Memorizer.scala 50:16]
   wire [7:0] mem_0_readByte_0_data; // @[Memorizer.scala 50:16]
   wire [7:0] mem_0_MPORT_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_0_MPORT_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_0_MPORT_addr; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_mask; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_0_MPORT_4_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_0_MPORT_4_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_0_MPORT_4_addr; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_4_mask; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_4_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_0_MPORT_10_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_0_MPORT_10_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_0_MPORT_10_addr; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_10_mask; // @[Memorizer.scala 50:16]
   wire  mem_0_MPORT_10_en; // @[Memorizer.scala 50:16]
   reg  mem_0_readByte_0_en_pipe_0;
-  reg [9:0] mem_0_readByte_0_addr_pipe_0;
-  reg [7:0] mem_1 [0:1023]; // @[Memorizer.scala 50:16]
+  reg [20:0] mem_0_readByte_0_addr_pipe_0;
+  reg [7:0] mem_1 [0:1079999]; // @[Memorizer.scala 50:16]
   wire  mem_1_readByte_1_en; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_1_readByte_1_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_1_readByte_1_addr; // @[Memorizer.scala 50:16]
   wire [7:0] mem_1_readByte_1_data; // @[Memorizer.scala 50:16]
   wire [7:0] mem_1_MPORT_1_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_1_MPORT_1_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_1_MPORT_1_addr; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_1_mask; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_1_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_1_MPORT_5_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_1_MPORT_5_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_1_MPORT_5_addr; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_5_mask; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_5_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_1_MPORT_6_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_1_MPORT_6_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_1_MPORT_6_addr; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_6_mask; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_6_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_1_MPORT_11_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_1_MPORT_11_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_1_MPORT_11_addr; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_11_mask; // @[Memorizer.scala 50:16]
   wire  mem_1_MPORT_11_en; // @[Memorizer.scala 50:16]
   reg  mem_1_readByte_1_en_pipe_0;
-  reg [9:0] mem_1_readByte_1_addr_pipe_0;
-  reg [7:0] mem_2 [0:1023]; // @[Memorizer.scala 50:16]
+  reg [20:0] mem_1_readByte_1_addr_pipe_0;
+  reg [7:0] mem_2 [0:1079999]; // @[Memorizer.scala 50:16]
   wire  mem_2_readByte_2_en; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_2_readByte_2_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_2_readByte_2_addr; // @[Memorizer.scala 50:16]
   wire [7:0] mem_2_readByte_2_data; // @[Memorizer.scala 50:16]
   wire [7:0] mem_2_MPORT_2_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_2_MPORT_2_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_2_MPORT_2_addr; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_2_mask; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_2_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_2_MPORT_7_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_2_MPORT_7_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_2_MPORT_7_addr; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_7_mask; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_7_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_2_MPORT_8_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_2_MPORT_8_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_2_MPORT_8_addr; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_8_mask; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_8_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_2_MPORT_12_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_2_MPORT_12_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_2_MPORT_12_addr; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_12_mask; // @[Memorizer.scala 50:16]
   wire  mem_2_MPORT_12_en; // @[Memorizer.scala 50:16]
   reg  mem_2_readByte_2_en_pipe_0;
-  reg [9:0] mem_2_readByte_2_addr_pipe_0;
-  reg [7:0] mem_3 [0:1023]; // @[Memorizer.scala 50:16]
+  reg [20:0] mem_2_readByte_2_addr_pipe_0;
+  reg [7:0] mem_3 [0:1079999]; // @[Memorizer.scala 50:16]
   wire  mem_3_readByte_3_en; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_3_readByte_3_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_3_readByte_3_addr; // @[Memorizer.scala 50:16]
   wire [7:0] mem_3_readByte_3_data; // @[Memorizer.scala 50:16]
   wire [7:0] mem_3_MPORT_3_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_3_MPORT_3_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_3_MPORT_3_addr; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_3_mask; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_3_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_3_MPORT_9_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_3_MPORT_9_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_3_MPORT_9_addr; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_9_mask; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_9_en; // @[Memorizer.scala 50:16]
   wire [7:0] mem_3_MPORT_13_data; // @[Memorizer.scala 50:16]
-  wire [9:0] mem_3_MPORT_13_addr; // @[Memorizer.scala 50:16]
+  wire [20:0] mem_3_MPORT_13_addr; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_13_mask; // @[Memorizer.scala 50:16]
   wire  mem_3_MPORT_13_en; // @[Memorizer.scala 50:16]
   reg  mem_3_readByte_3_en_pipe_0;
-  reg [9:0] mem_3_readByte_3_addr_pipe_0;
+  reg [20:0] mem_3_readByte_3_addr_pipe_0;
   reg [4:0] rdReg; // @[Memorizer.scala 30:22]
   reg [31:0] ALUreg; // @[Memorizer.scala 31:23]
   reg [4:0] rdLastRegMem; // @[Memorizer.scala 36:29]
@@ -959,70 +995,86 @@ module Memorizer(
   reg  enabler; // @[Memorizer.scala 130:24]
   assign mem_0_readByte_0_en = mem_0_readByte_0_en_pipe_0;
   assign mem_0_readByte_0_addr = mem_0_readByte_0_addr_pipe_0;
+  `ifndef RANDOMIZE_GARBAGE_ASSIGN
   assign mem_0_readByte_0_data = mem_0[mem_0_readByte_0_addr]; // @[Memorizer.scala 50:16]
+  `else
+  assign mem_0_readByte_0_data = mem_0_readByte_0_addr >= 21'h107ac0 ? _RAND_1[7:0] : mem_0[mem_0_readByte_0_addr]; // @[Memorizer.scala 50:16]
+  `endif // RANDOMIZE_GARBAGE_ASSIGN
   assign mem_0_MPORT_data = wrDataReg[7:0];
-  assign mem_0_MPORT_addr = {{2'd0}, writeAddress};
+  assign mem_0_MPORT_addr = {{13'd0}, writeAddress};
   assign mem_0_MPORT_mask = 1'h1;
   assign mem_0_MPORT_en = _T ? 1'h0 : _GEN_133;
   assign mem_0_MPORT_4_data = wrDataReg[7:0];
-  assign mem_0_MPORT_4_addr = {{2'd0}, writeAddress};
+  assign mem_0_MPORT_4_addr = {{13'd0}, writeAddress};
   assign mem_0_MPORT_4_mask = 1'h1;
   assign mem_0_MPORT_4_en = _T ? 1'h0 : _GEN_153;
   assign mem_0_MPORT_10_data = wrDataReg[7:0];
-  assign mem_0_MPORT_10_addr = {{2'd0}, writeAddress};
+  assign mem_0_MPORT_10_addr = {{13'd0}, writeAddress};
   assign mem_0_MPORT_10_mask = 1'h1;
   assign mem_0_MPORT_10_en = _T ? 1'h0 : _GEN_174;
   assign mem_1_readByte_1_en = mem_1_readByte_1_en_pipe_0;
   assign mem_1_readByte_1_addr = mem_1_readByte_1_addr_pipe_0;
+  `ifndef RANDOMIZE_GARBAGE_ASSIGN
   assign mem_1_readByte_1_data = mem_1[mem_1_readByte_1_addr]; // @[Memorizer.scala 50:16]
+  `else
+  assign mem_1_readByte_1_data = mem_1_readByte_1_addr >= 21'h107ac0 ? _RAND_5[7:0] : mem_1[mem_1_readByte_1_addr]; // @[Memorizer.scala 50:16]
+  `endif // RANDOMIZE_GARBAGE_ASSIGN
   assign mem_1_MPORT_1_data = wrDataReg[7:0];
-  assign mem_1_MPORT_1_addr = {{2'd0}, writeAddress};
+  assign mem_1_MPORT_1_addr = {{13'd0}, writeAddress};
   assign mem_1_MPORT_1_mask = 1'h1;
   assign mem_1_MPORT_1_en = _T ? 1'h0 : _GEN_138;
   assign mem_1_MPORT_5_data = wrDataReg[15:8];
-  assign mem_1_MPORT_5_addr = {{2'd0}, writeAddress};
+  assign mem_1_MPORT_5_addr = {{13'd0}, writeAddress};
   assign mem_1_MPORT_5_mask = 1'h1;
   assign mem_1_MPORT_5_en = _T ? 1'h0 : _GEN_153;
   assign mem_1_MPORT_6_data = wrDataReg[7:0];
-  assign mem_1_MPORT_6_addr = {{2'd0}, writeAddress};
+  assign mem_1_MPORT_6_addr = {{13'd0}, writeAddress};
   assign mem_1_MPORT_6_mask = 1'h1;
   assign mem_1_MPORT_6_en = _T ? 1'h0 : _GEN_160;
   assign mem_1_MPORT_11_data = wrDataReg[15:8];
-  assign mem_1_MPORT_11_addr = {{2'd0}, writeAddress};
+  assign mem_1_MPORT_11_addr = {{13'd0}, writeAddress};
   assign mem_1_MPORT_11_mask = 1'h1;
   assign mem_1_MPORT_11_en = _T ? 1'h0 : _GEN_174;
   assign mem_2_readByte_2_en = mem_2_readByte_2_en_pipe_0;
   assign mem_2_readByte_2_addr = mem_2_readByte_2_addr_pipe_0;
+  `ifndef RANDOMIZE_GARBAGE_ASSIGN
   assign mem_2_readByte_2_data = mem_2[mem_2_readByte_2_addr]; // @[Memorizer.scala 50:16]
+  `else
+  assign mem_2_readByte_2_data = mem_2_readByte_2_addr >= 21'h107ac0 ? _RAND_9[7:0] : mem_2[mem_2_readByte_2_addr]; // @[Memorizer.scala 50:16]
+  `endif // RANDOMIZE_GARBAGE_ASSIGN
   assign mem_2_MPORT_2_data = wrDataReg[7:0];
-  assign mem_2_MPORT_2_addr = {{2'd0}, writeAddress};
+  assign mem_2_MPORT_2_addr = {{13'd0}, writeAddress};
   assign mem_2_MPORT_2_mask = 1'h1;
   assign mem_2_MPORT_2_en = _T ? 1'h0 : _GEN_143;
   assign mem_2_MPORT_7_data = wrDataReg[15:8];
-  assign mem_2_MPORT_7_addr = {{2'd0}, writeAddress};
+  assign mem_2_MPORT_7_addr = {{13'd0}, writeAddress};
   assign mem_2_MPORT_7_mask = 1'h1;
   assign mem_2_MPORT_7_en = _T ? 1'h0 : _GEN_160;
   assign mem_2_MPORT_8_data = wrDataReg[7:0];
-  assign mem_2_MPORT_8_addr = {{2'd0}, writeAddress};
+  assign mem_2_MPORT_8_addr = {{13'd0}, writeAddress};
   assign mem_2_MPORT_8_mask = 1'h1;
   assign mem_2_MPORT_8_en = _T ? 1'h0 : _GEN_167;
   assign mem_2_MPORT_12_data = wrDataReg[23:16];
-  assign mem_2_MPORT_12_addr = {{2'd0}, writeAddress};
+  assign mem_2_MPORT_12_addr = {{13'd0}, writeAddress};
   assign mem_2_MPORT_12_mask = 1'h1;
   assign mem_2_MPORT_12_en = _T ? 1'h0 : _GEN_174;
   assign mem_3_readByte_3_en = mem_3_readByte_3_en_pipe_0;
   assign mem_3_readByte_3_addr = mem_3_readByte_3_addr_pipe_0;
+  `ifndef RANDOMIZE_GARBAGE_ASSIGN
   assign mem_3_readByte_3_data = mem_3[mem_3_readByte_3_addr]; // @[Memorizer.scala 50:16]
+  `else
+  assign mem_3_readByte_3_data = mem_3_readByte_3_addr >= 21'h107ac0 ? _RAND_13[7:0] : mem_3[mem_3_readByte_3_addr]; // @[Memorizer.scala 50:16]
+  `endif // RANDOMIZE_GARBAGE_ASSIGN
   assign mem_3_MPORT_3_data = wrDataReg[7:0];
-  assign mem_3_MPORT_3_addr = {{2'd0}, writeAddress};
+  assign mem_3_MPORT_3_addr = {{13'd0}, writeAddress};
   assign mem_3_MPORT_3_mask = 1'h1;
   assign mem_3_MPORT_3_en = _T ? 1'h0 : _GEN_148;
   assign mem_3_MPORT_9_data = wrDataReg[15:8];
-  assign mem_3_MPORT_9_addr = {{2'd0}, writeAddress};
+  assign mem_3_MPORT_9_addr = {{13'd0}, writeAddress};
   assign mem_3_MPORT_9_mask = 1'h1;
   assign mem_3_MPORT_9_en = _T ? 1'h0 : _GEN_167;
   assign mem_3_MPORT_13_data = wrDataReg[31:24];
-  assign mem_3_MPORT_13_addr = {{2'd0}, writeAddress};
+  assign mem_3_MPORT_13_addr = {{13'd0}, writeAddress};
   assign mem_3_MPORT_13_mask = 1'h1;
   assign mem_3_MPORT_13_en = _T ? 1'h0 : _GEN_174;
   assign io_rdLastRegMemOut = rdLastRegMem; // @[Memorizer.scala 41:22]
@@ -1047,7 +1099,7 @@ module Memorizer(
     end
     mem_0_readByte_0_en_pipe_0 <= 1'h1;
     if (1'h1) begin
-      mem_0_readByte_0_addr_pipe_0 <= {{2'd0}, readAddress};
+      mem_0_readByte_0_addr_pipe_0 <= {{13'd0}, readAddress};
     end
     if (mem_1_MPORT_1_en & mem_1_MPORT_1_mask) begin
       mem_1[mem_1_MPORT_1_addr] <= mem_1_MPORT_1_data; // @[Memorizer.scala 50:16]
@@ -1063,7 +1115,7 @@ module Memorizer(
     end
     mem_1_readByte_1_en_pipe_0 <= 1'h1;
     if (1'h1) begin
-      mem_1_readByte_1_addr_pipe_0 <= {{2'd0}, readAddress};
+      mem_1_readByte_1_addr_pipe_0 <= {{13'd0}, readAddress};
     end
     if (mem_2_MPORT_2_en & mem_2_MPORT_2_mask) begin
       mem_2[mem_2_MPORT_2_addr] <= mem_2_MPORT_2_data; // @[Memorizer.scala 50:16]
@@ -1079,7 +1131,7 @@ module Memorizer(
     end
     mem_2_readByte_2_en_pipe_0 <= 1'h1;
     if (1'h1) begin
-      mem_2_readByte_2_addr_pipe_0 <= {{2'd0}, readAddress};
+      mem_2_readByte_2_addr_pipe_0 <= {{13'd0}, readAddress};
     end
     if (mem_3_MPORT_3_en & mem_3_MPORT_3_mask) begin
       mem_3[mem_3_MPORT_3_addr] <= mem_3_MPORT_3_data; // @[Memorizer.scala 50:16]
@@ -1092,7 +1144,7 @@ module Memorizer(
     end
     mem_3_readByte_3_en_pipe_0 <= 1'h1;
     if (1'h1) begin
-      mem_3_readByte_3_addr_pipe_0 <= {{2'd0}, readAddress};
+      mem_3_readByte_3_addr_pipe_0 <= {{13'd0}, readAddress};
     end
     if (reset) begin // @[Memorizer.scala 30:22]
       rdReg <= 5'h0; // @[Memorizer.scala 30:22]
@@ -1195,63 +1247,69 @@ initial begin
         #0.002 begin end
       `endif
     `endif
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+  _RAND_1 = {1{`RANDOM}};
+  _RAND_5 = {1{`RANDOM}};
+  _RAND_9 = {1{`RANDOM}};
+  _RAND_13 = {1{`RANDOM}};
+`endif // RANDOMIZE_GARBAGE_ASSIGN
 `ifdef RANDOMIZE_MEM_INIT
   _RAND_0 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 1024; initvar = initvar+1)
+  for (initvar = 0; initvar < 1080000; initvar = initvar+1)
     mem_0[initvar] = _RAND_0[7:0];
-  _RAND_3 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 1024; initvar = initvar+1)
-    mem_1[initvar] = _RAND_3[7:0];
-  _RAND_6 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 1024; initvar = initvar+1)
-    mem_2[initvar] = _RAND_6[7:0];
-  _RAND_9 = {1{`RANDOM}};
-  for (initvar = 0; initvar < 1024; initvar = initvar+1)
-    mem_3[initvar] = _RAND_9[7:0];
+  _RAND_4 = {1{`RANDOM}};
+  for (initvar = 0; initvar < 1080000; initvar = initvar+1)
+    mem_1[initvar] = _RAND_4[7:0];
+  _RAND_8 = {1{`RANDOM}};
+  for (initvar = 0; initvar < 1080000; initvar = initvar+1)
+    mem_2[initvar] = _RAND_8[7:0];
+  _RAND_12 = {1{`RANDOM}};
+  for (initvar = 0; initvar < 1080000; initvar = initvar+1)
+    mem_3[initvar] = _RAND_12[7:0];
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
-  _RAND_1 = {1{`RANDOM}};
-  mem_0_readByte_0_en_pipe_0 = _RAND_1[0:0];
   _RAND_2 = {1{`RANDOM}};
-  mem_0_readByte_0_addr_pipe_0 = _RAND_2[9:0];
-  _RAND_4 = {1{`RANDOM}};
-  mem_1_readByte_1_en_pipe_0 = _RAND_4[0:0];
-  _RAND_5 = {1{`RANDOM}};
-  mem_1_readByte_1_addr_pipe_0 = _RAND_5[9:0];
+  mem_0_readByte_0_en_pipe_0 = _RAND_2[0:0];
+  _RAND_3 = {1{`RANDOM}};
+  mem_0_readByte_0_addr_pipe_0 = _RAND_3[20:0];
+  _RAND_6 = {1{`RANDOM}};
+  mem_1_readByte_1_en_pipe_0 = _RAND_6[0:0];
   _RAND_7 = {1{`RANDOM}};
-  mem_2_readByte_2_en_pipe_0 = _RAND_7[0:0];
-  _RAND_8 = {1{`RANDOM}};
-  mem_2_readByte_2_addr_pipe_0 = _RAND_8[9:0];
+  mem_1_readByte_1_addr_pipe_0 = _RAND_7[20:0];
   _RAND_10 = {1{`RANDOM}};
-  mem_3_readByte_3_en_pipe_0 = _RAND_10[0:0];
+  mem_2_readByte_2_en_pipe_0 = _RAND_10[0:0];
   _RAND_11 = {1{`RANDOM}};
-  mem_3_readByte_3_addr_pipe_0 = _RAND_11[9:0];
-  _RAND_12 = {1{`RANDOM}};
-  rdReg = _RAND_12[4:0];
-  _RAND_13 = {1{`RANDOM}};
-  ALUreg = _RAND_13[31:0];
+  mem_2_readByte_2_addr_pipe_0 = _RAND_11[20:0];
   _RAND_14 = {1{`RANDOM}};
-  rdLastRegMem = _RAND_14[4:0];
+  mem_3_readByte_3_en_pipe_0 = _RAND_14[0:0];
   _RAND_15 = {1{`RANDOM}};
-  aluLastRegMem = _RAND_15[31:0];
+  mem_3_readByte_3_addr_pipe_0 = _RAND_15[20:0];
   _RAND_16 = {1{`RANDOM}};
-  wrEnaReg = _RAND_16[0:0];
+  rdReg = _RAND_16[4:0];
   _RAND_17 = {1{`RANDOM}};
-  rdEnaReg = _RAND_17[0:0];
+  ALUreg = _RAND_17[31:0];
   _RAND_18 = {1{`RANDOM}};
-  wrDataReg = _RAND_18[31:0];
+  rdLastRegMem = _RAND_18[4:0];
   _RAND_19 = {1{`RANDOM}};
-  wrAddrReg = _RAND_19[9:0];
+  aluLastRegMem = _RAND_19[31:0];
   _RAND_20 = {1{`RANDOM}};
-  memOpReg = _RAND_20[2:0];
+  wrEnaReg = _RAND_20[0:0];
   _RAND_21 = {1{`RANDOM}};
-  offset = _RAND_21[1:0];
+  rdEnaReg = _RAND_21[0:0];
   _RAND_22 = {1{`RANDOM}};
-  rdLoadRegger = _RAND_22[4:0];
+  wrDataReg = _RAND_22[31:0];
   _RAND_23 = {1{`RANDOM}};
-  aluLoadRegger = _RAND_23[31:0];
+  wrAddrReg = _RAND_23[9:0];
   _RAND_24 = {1{`RANDOM}};
-  enabler = _RAND_24[0:0];
+  memOpReg = _RAND_24[2:0];
+  _RAND_25 = {1{`RANDOM}};
+  offset = _RAND_25[1:0];
+  _RAND_26 = {1{`RANDOM}};
+  rdLoadRegger = _RAND_26[4:0];
+  _RAND_27 = {1{`RANDOM}};
+  aluLoadRegger = _RAND_27[31:0];
+  _RAND_28 = {1{`RANDOM}};
+  enabler = _RAND_28[0:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
