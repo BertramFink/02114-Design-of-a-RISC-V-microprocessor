@@ -27,8 +27,6 @@ class Memorizer extends Module {
   })
 
 
-
-
   val rdReg = RegNext(io.rdInput, 0.U)
   val ALUreg = RegNext(io.ALUinput, 0.S)
   io.rdOutput := rdReg
@@ -46,92 +44,85 @@ class Memorizer extends Module {
   val wrEnaReg = RegNext(io.wrEna, false.B)
   val rdEnaReg = RegNext(io.rdEna, false.B)
   val wrDataReg = RegNext(io.wrData, 0.U)
-  val rdAddrReg = RegNext(io.rdAddr, 0.U)
   val wrAddrReg = RegNext(io.wrAddr, 0.U)
   val memOpReg = RegNext(io.memOp, 0.U)
-  val mem = Seq.fill(4) { SyncReadMem(1024, UInt(8.W)) }
+  val mem = Seq.fill(4) {
+    SyncReadMem(1024, UInt(8.W))
+  }
   io.wrEnaOut := wrEnaReg
   io.rdEnaOut := rdEnaReg
 
-  val readByte0  = mem(0).read(io.rdAddr>>2)
-  val readByte1  = mem(1).read(io.rdAddr>>2)
-  val readByte2  = mem(2).read(io.rdAddr>>2)
-  val readByte3  = mem(3).read(io.rdAddr>>2)
-  val offset =  RegNext(io.rdAddr(1,0), 0.U)
+  val readAddress = io.rdAddr >> 2
+  val writeAddress = wrAddrReg >> 2
 
-
-  val writeByte3 =wrDataReg(31,24).asUInt
-  val writeByte2 =wrDataReg(23,16).asUInt
-  val writeByte1 =wrDataReg(15,8).asUInt
-  val writeByte0 =wrDataReg(7,0).asUInt
+  val offset = RegNext(io.rdAddr(1, 0), 0.U)
+  val writeByte = Seq(
+    wrDataReg(7, 0).asUInt,
+    wrDataReg(15, 8).asUInt,
+    wrDataReg(23, 16).asUInt,
+    wrDataReg(31, 24).asUInt,
+  )
+  val readByte = Seq(
+    mem(0).read(readAddress),
+    mem(1).read(readAddress),
+    mem(2).read(readAddress),
+    mem(3).read(readAddress),
+  )
 
   io.rdData := 0.S
   io.rdLoadRegMemOut := 0.U
   io.aluLoadRegMemOut := 0.S
+
   switch(memOpReg) {
     is(0.U) {
-      io.rdData := 4.S
+      io.rdData := 9999.S
     }
-    is(1.U) {
-      io.rdData := readByte0.asSInt
-      when(wrEnaReg) {
-        io.rdData := 0.S
-        switch(offset) {
-          is(0.U) {
-            mem(0).write(wrAddrReg>>2, writeByte0)
-          }
-          is(1.U) {
-            mem(1).write(wrAddrReg>>2, writeByte0)
-          }
-          is(2.U) {
-            mem(2).write(wrAddrReg>>2, writeByte0)
-          }
-          is(3.U) {
-            mem(3).write(wrAddrReg>>2, writeByte0)
-          }
-        }
-      }
-    }
-    is(2.U) {
-      io.rdData := Cat(readByte1,  readByte0).asSInt
-      when(wrEnaReg) {
-        io.rdData := 0.S
-        switch(offset) {
-          is(0.U) {
-            mem(0).write(wrAddrReg>>2, writeByte0)
-            mem(1).write(wrAddrReg>>2, writeByte1)
-          }
-          is(1.U) {
-            mem(1).write(wrAddrReg>>2, writeByte0)
-            mem(2).write(wrAddrReg>>2, writeByte1)
-          }
-          is(2.U) {
-            mem(2).write(wrAddrReg>>2, writeByte0)
-            mem(3).write(wrAddrReg>>2, writeByte1)
-          }
-          is(3.U) {
-            mem(3).write(wrAddrReg>>2, writeByte0)
+    is(1.U) { //Byte
+      for (i <- 0 until 4) {
+        when(offset === i.U) {
+          io.rdData := readByte(i).asSInt
 
-          }
-        }
-      }
-    }
-    is(3.U) {
-          io.rdData := Cat(readByte3, readByte2, readByte1, readByte0).asSInt
           when(wrEnaReg) {
-
-            mem(0).write(wrAddrReg >> 2, writeByte0)
-            mem(1).write(wrAddrReg >> 2, writeByte1)
-            mem(2).write(wrAddrReg >> 2, writeByte2)
-            mem(3).write(wrAddrReg >> 2, writeByte3)
+            mem(i).write(writeAddress, writeByte(0))
           }
+        }
+      }
+    }
+    is(2.U) { //Half
+      for (i <- 0 until 3) {
+        when(offset === i.U) {
+          io.rdData := Cat(readByte(i + 1), readByte(i)).asSInt
+
+          when(wrEnaReg) {
+            mem(i).write(writeAddress, writeByte(0))
+            mem(i + 1).write(writeAddress, writeByte(1))
+          }
+        }
+      }
+    }
+    is(3.U) { //Word
+      io.rdData := Cat(readByte(3), readByte(2), readByte(1), readByte(0)).asSInt
+
+      when(wrEnaReg) {
+        for (i <- 0 until 4) {
+          mem(i).write(writeAddress, writeByte(i))
+        }
+      }
     }
 
-    is(4.U) {
-      io.rdData := Cat(0.U(24.W), readByte0).asSInt
+    is(4.U) { // LBU
+      for (i <- 0 until 4) {
+        when(offset === i.U) {
+          io.rdData := Cat(0.U(24.W), readByte(i)).asSInt
+        }
+      }
     }
-    is(5.U) {
-      io.rdData := Cat(0.U(16.W), readByte1,  readByte0).asSInt
+    is(5.U) { //LHU
+      for (i <- 0 until 3) {
+        when(offset === i.U) {
+          io.rdData := Cat(0.U(16.W), readByte(i + 1), readByte(i)).asSInt
+        }
+      }
     }
   }
   val rdLoadRegger = RegInit(0.U(5.W))
@@ -140,7 +131,7 @@ class Memorizer extends Module {
   enabler := rdEnaReg
   io.loadEnabler := enabler
   rdLoadRegger := rdReg
-  aluLoadRegger:= io.rdData
+  aluLoadRegger := io.rdData
   io.rdLoadRegMemOut := rdLoadRegger
   io.aluLoadRegMemOut := aluLoadRegger
 }

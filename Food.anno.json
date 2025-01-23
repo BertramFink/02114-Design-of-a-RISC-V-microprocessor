@@ -1,0 +1,21 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"."
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~Food|Food>io_seg",
+    "sources":[
+      "~Food|Food>io_switchin3",
+      "~Food|Food>io_switchin4",
+      "~Food|Food>io_switchin5",
+      "~Food|Food>io_switchin",
+      "~Food|Food>io_switchin2"
+    ]
+  }
+]

@@ -75,7 +75,7 @@ class Executer extends Module {
 
 
 
-  pcReg := io.pcIn
+
   branchEnableReg := false.B
   val lastMemBool1 = io.rdLastRegMemIn === rs1Reg && (rs1Reg =/= 0.U)
   val lastMemBool2 = io.rdLastRegMemIn === rs2Reg && (rs2Reg =/= 0.U)
@@ -86,7 +86,7 @@ class Executer extends Module {
 
   val rs1Wire = Mux(lastExBool1, aluLastRegEx, Mux(lastMemBool1, Mux(loadMemBool1, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs1Reg)))
   val rs2Wire = Mux(lastExBool2, aluLastRegEx, Mux(lastMemBool2, Mux(loadMemBool2, io.aluLoadRegMemIn,io.aluLastRegMemIn), io.x(rs2Reg)))
-
+  pcReg := io.pcIn
 
 
   branchOutReg := pcReg
